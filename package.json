@@ -72,12 +72,14 @@
     "koa-proxy": "^0.5.0",
     "koa-static": "^2.0.0",
     "react": "^0.14.0",
+    "react-codemirror": "^0.2.6",
     "react-dom": "^0.14.0",
     "react-redux": "^4.0.0",
     "react-router": "^2.0.0",
     "react-router-redux": "^4.0.0",
     "redux": "^3.0.0",
-    "redux-thunk": "^2.0.0"
+    "redux-thunk": "^2.0.0",
+    "string-argv": "0.0.2"
   },
   "devDependencies": {
     "babel-cli": "^6.5.1",

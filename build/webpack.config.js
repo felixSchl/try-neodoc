@@ -1,3 +1,4 @@
+import path from 'path';
 import webpack from 'webpack';
 import cssnano from 'cssnano';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
@@ -16,7 +17,11 @@ const webpackConfig = {
   devtool: config.compiler_devtool,
   resolve: {
     root: paths.base(config.dir_client),
-    extensions: ['', '.js', '.jsx', '.json']
+    extensions: ['', '.js', '.jsx', '.json'],
+    modulesDirectories: ['node_modules'],
+    alias: {
+      'neodoc': path.resolve(__dirname, '../node_modules/neodoc'),
+    }
   },
   module: {}
 };
