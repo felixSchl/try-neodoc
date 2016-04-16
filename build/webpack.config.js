@@ -21,7 +21,11 @@ const webpackConfig = {
     modulesDirectories: ['node_modules'],
     alias: {
       'neodoc': path.resolve(__dirname, '../node_modules/neodoc'),
-    }
+    },
+    fallback: [path.join(__dirname, 'node_modules')]
+  },
+  resolveLoader: {
+    fallback: [path.join(__dirname, 'node_modules')]
   },
   module: {}
 };
@@ -97,7 +101,7 @@ if (!__TEST__) {
 webpackConfig.module.preLoaders = [{
   test: /\.(js|jsx)$/,
   loader: 'eslint',
-  exclude: /node_modules/
+  exclude: /(node_modules|\/Users\/felix\/projects\/docopt)/,
 }];
 
 webpackConfig.eslint = {
@@ -111,7 +115,7 @@ webpackConfig.eslint = {
 // JavaScript / JSON
 webpackConfig.module.loaders = [{
   test: /\.(js|jsx)$/,
-  exclude: /node_modules/,
+  exclude: /(node_modules|\/Users\/felix\/projects\/docopt)/,
   loader: 'babel',
   query: {
     cacheDirectory: true,
