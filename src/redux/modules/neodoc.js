@@ -3,16 +3,18 @@
 import stringArgv from 'string-argv';
 import * as neodoc from 'neodoc';
 
-export const NEODOC_SET_SOURCE     = 'NEODOC_SET_SOURCE';
-export const NEODOC_SET_ARGV       = 'NEODOC_SET_ARGV';
+export const NEODOC_SET_SOURCE = 'NEODOC_SET_SOURCE';
+export const NEODOC_SET_ARGV = 'NEODOC_SET_ARGV';
 export const NEODOC_SET_OPTS_FIRST = 'NEODOC_SET_OPTS_FIRST';
+export const NEODOC_SET_SMART_OPTS = 'NEODOC_SET_SMART_OPTS';
 
 type State = {
-  source:       string,
-  output:       Object,
-  error:        Object,
-  argv:         Array,
-  optionsFirst: boolean
+  source: string,
+  output: Object,
+  error: Object,
+  argv: Array,
+  optionsFirst: boolean,
+  smartOptions: boolean,
 };
 
 export function setSource (value: string): Action {
@@ -36,33 +38,44 @@ export function setOptionsFirst (value: boolean): Action {
   };
 }
 
+export function setSmartOptions (value: boolean): Action {
+  return {
+    type: NEODOC_SET_SMART_OPTS,
+    payload: value
+  };
+}
+
 export const actions = {
   setSource,
-  setArgv
+  setArgv,
+  setOptionsFirst,
+  setSmartOptions
 };
 
-
-function run(text, argv, optionsFirst) {
-  let output = null, error = null;
+function run (text, argv, optionsFirst, smartOptions) {
+  let output = null;
+  let error = null;
   try {
     output = neodoc.run(
       text,
       {
         argv: stringArgv(argv),
         dontExit: true,
-        optionsFirst: optionsFirst
+        optionsFirst: optionsFirst,
+        smartOptions: smartOptions
       }
     );
-  } catch(e) {
+  } catch (e) {
     error = e;
   }
 
   return {
-    source:       text,
-    output:       output,
-    argv:         argv,
-    error:        error,
-    optionsFirst: optionsFirst
+    source: text,
+    output: output,
+    argv: argv,
+    error: error,
+    optionsFirst: optionsFirst,
+    smartOptions: smartOptions
   };
 }
 
@@ -72,24 +85,36 @@ const ACTION_HANDLERS = {
       return run(
         action.payload,
         state.argv,
-        state.optionsFirst
-      )
+        state.optionsFirst,
+        state.smartOptions
+      );
     },
   [NEODOC_SET_ARGV]:
     (state: State, action: {payload: string}): string => {
       return run(
         state.source,
         action.payload,
-        state.optionsFirst
-      )
+        state.optionsFirst,
+        state.smartOptions
+      );
     },
   [NEODOC_SET_OPTS_FIRST]:
     (state: State, action: {payload: boolean}): boolean => {
       return run(
         state.source,
         state.argv,
+        action.payload,
+        state.smartOptions
+      );
+    },
+  [NEODOC_SET_SMART_OPTS]:
+    (state: State, action: {payload: boolean}): boolean => {
+      return run(
+        state.source,
+        state.argv,
+        state.optionsFirst,
         action.payload
-      )
+      );
     }
 };
 
@@ -102,8 +127,9 @@ Usage:
   argv: '',
   output: null,
   error: null,
-  optionsFirst: false
-}
+  optionsFirst: false,
+  smartOptions: false
+};
 
 export default function counterReducer (
   state: State = initialState,
