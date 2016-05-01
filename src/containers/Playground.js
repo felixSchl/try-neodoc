@@ -5,9 +5,6 @@ import { setSmartOptions, setSource, setArgv, setOptionsFirst
        } from 'redux/modules/neodoc';
 import Codemirror from 'react-codemirror';
 
-type Props = {
-
-}
 export class Playground extends React.Component {
   props: Props;
 
@@ -26,19 +23,27 @@ export class Playground extends React.Component {
 
   render () {
     return (
-      <div>
+      <div className='playground'>
         <div>
-          <h4>Write your help text</h4>
           <Codemirror
-            ref='editor'
             value={this.props.source}
             onChange={this.props.setSource}
+            options={{
+              readOnly: false,
+              theme: 'tomorrow-night-eighties'
+            }}
           />
         </div>
-        <div>
-          <h4>Options:</h4>
 
-          <ul>
+        <div className='command-line'>
+          <span>$ prog</span>
+          <input type='text'
+            value={this.props.argv}
+            onChange={this.props.setArgv}/>
+        </div>
+
+        <div>
+          <ul className='options'>
             <li>
               <input name='options-first'
                 type='checkbox'
@@ -57,11 +62,6 @@ export class Playground extends React.Component {
               <label htmlFor='smart-options'>Enable smart-options</label>
             </li>
           </ul>
-
-          <h4>Command line:</h4>
-          <input type='text'
-            value={this.props.argv}
-            onChange={this.props.setArgv}/>
         </div>
         <div>
         {
@@ -71,9 +71,19 @@ export class Playground extends React.Component {
                   this.props.error.message
                 } </pre>
               </div>
-            : <div className='output'> {
-                  JSON.stringify(this.props.output)
-              } </div>
+            : <div className='output'>
+                <table>
+                <tbody>
+                {_.map(this.props.output, (v, k, i) => (
+                  <tr key={k}>
+                    <td>{k}</td>
+                    <td>&rarr;</td>
+                    <td>{JSON.stringify(v)}</td>
+                  </tr>
+                ))}
+                </tbody>
+                </table>
+              </div>
         }
         </div>
       </div>

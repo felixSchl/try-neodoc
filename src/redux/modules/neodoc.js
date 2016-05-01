@@ -55,6 +55,7 @@ export const actions = {
 function run (text, argv, optionsFirst, smartOptions) {
   let output = null;
   let error = null;
+  console.log(text, argv, optionsFirst, smartOptions);
   try {
     output = neodoc.run(
       text,
