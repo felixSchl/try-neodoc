@@ -38,7 +38,7 @@
       }
     },
     "deploy": {
-      "command": "cd dist && git init && git add -A && git commit -m 'Deploy' && git checkout -b gh-pages && git remote add deploy git@github.com:felixschl/try-neodoc && git push -f -u deploy gh-pages",
+      "command": "cd dist && git init && git add -A && git commit -m 'Deploy' && git checkout -b gh-pages && git remote add deploy git@github.com:felixschl/neodoc && git push -f -u deploy gh-pages",
       "env": {
         "NODE_ENV": "production",
         "DEBUG": "app:*"
