@@ -28,6 +28,18 @@
     margin-right: auto;
     max-width: 720px;
     padding: 1em;
+
+    .title {
+      padding-bottom: 0;
+      margin-bottom: .3em;
+    }
+
+    .subtitle {
+      padding-top: 0;
+      margin-top: 0;
+      font-weight: normal;
+      font-style: italic;
+    }
   }
 
   .playground {
