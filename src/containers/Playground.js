@@ -30,7 +30,7 @@ export class Playground extends React.Component {
             onChange={this.props.setSource}
             options={{
               readOnly: false,
-              theme: 'tomorrow-night-eighties'
+              theme: 'neo'
             }}
           />
         </div>

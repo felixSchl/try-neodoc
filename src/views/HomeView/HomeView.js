@@ -17,9 +17,7 @@ export class HomeView extends React.Component {
             data-canonical-src='https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png'/>
         </a>
         <h1 className='title'>&lt;neodoc&gt;</h1>
-        <h5 className='subtitle'>
-          Beautiful, handcrafted commandlines &mdash;
-        </h5>
+        <h5 className='subtitle'>Beautiful, handcrafted commandlines</h5>
         <Playground/>
       </div>
     );

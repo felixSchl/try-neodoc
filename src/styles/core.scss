@@ -1,8 +1,8 @@
 :global {
   @import 'base';
   @import 'vendor/normalize';
-  @import 'vendor/codemirror';
-  @import 'vendor/codemirror-tomorrow-neight-eighties';
+  @import 'node_modules/codemirror/lib/codemirror';
+  @import 'node_modules/codemirror/theme/neo';
 
   // Some best-practice CSS that's useful for most apps
   // Just remove them if they're not what you want
@@ -53,6 +53,7 @@
 
     .CodeMirror {
       height: auto;
+      border: 1px solid #ccc;
       .CodeMirror-cursor {
         width: auto;
         border: 0;
@@ -62,7 +63,7 @@
     }
 
     .command-line {
-      border: 1px solid gray;
+      border: 1px solid #ccc;
       padding-left: 5px;
       width: 100%;
       span {
@@ -79,7 +80,11 @@
     }
 
     .output {
-      background-color: rgb(0, 150, 100);
+      background-color: rgba(0, 150, 100, 0.1);
+    }
+
+    .error {
+      background-color: rgba(150, 0, 0, 0.1);
     }
   }
 }
