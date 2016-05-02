@@ -30,7 +30,12 @@ export class Playground extends React.Component {
             onChange={this.props.setSource}
             options={{
               readOnly: false,
-              theme: 'neo'
+              theme: 'neo',
+              extraKeys: {
+                'Tab': (cm) => {
+                  cm.execCommand('insertSoftTab');
+                }
+              }
             }}
           />
         </div>
