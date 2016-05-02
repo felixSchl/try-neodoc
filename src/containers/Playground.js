@@ -101,7 +101,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  setSource: _.debounce((s) => dispatch(setSource(s)), 100),
+  setSource: (s) => dispatch(setSource(s)),
   setArgv: (event) => dispatch(setArgv(event.target.value)),
   setOptionsFirst: (event) => dispatch(setOptionsFirst(event.target.checked)),
   setSmartOptions: (event) => dispatch(setSmartOptions(event.target.checked))
