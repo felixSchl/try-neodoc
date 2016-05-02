@@ -41,6 +41,12 @@
 
     .CodeMirror {
       height: auto;
+      .CodeMirror-cursor {
+        width: auto;
+        border: 0;
+        background: transparent;
+        background: rgba(0, 200, 0, .4);
+      }
     }
 
     .command-line {
