@@ -18,6 +18,7 @@
     "dev:no-debug": "npm run dev -- --no_debug",
     "test": "better-npm-run test",
     "test:dev": "npm run test -- --watch",
+    "predeploy": "npm run clean && npm run compile",
     "deploy": "better-npm-run deploy",
     "flow:check": "babel-node bin/flow-check",
     "codecov": "cat coverage/*/lcov.info | codecov"
@@ -37,7 +38,7 @@
       }
     },
     "deploy": {
-      "command": "npm run clean && npm run compile",
+      "command": "cd dist && git init && git add -A && git commit -m 'Deploy' && git checkout -b gh-pages && git remote add deploy git@github.com:felixschl/try-neodoc && git push -f -u deploy gh-pages",
       "env": {
         "NODE_ENV": "production",
         "DEBUG": "app:*"
