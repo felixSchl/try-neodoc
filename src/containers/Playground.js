@@ -72,12 +72,14 @@ export class Playground extends React.Component {
         {
           (this.props.error)
             ? <div className='error' style={{whiteSpace: 'pre'}}>
-                <pre> {
+              <pre>
+                {
                   this.props.error.message
-                } </pre>
-              </div>
+                }
+              </pre>
+            </div>
             : <div className='output'>
-                <table>
+              <table>
                 <tbody>
                 {_.map(this.props.output, (v, k, i) => (
                   <tr key={k}>
@@ -87,8 +89,8 @@ export class Playground extends React.Component {
                   </tr>
                 ))}
                 </tbody>
-                </table>
-              </div>
+              </table>
+            </div>
         }
         </div>
       </div>
