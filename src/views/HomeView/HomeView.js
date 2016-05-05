@@ -19,11 +19,11 @@ export class HomeView extends React.Component {
             border: 0 }}
             src={forkmeImg}
             alt='Fork me on GitHub'
-            data-canonical-src={forkmeCanonical}/>
+            data-canonical-src={forkmeCanonical} />
         </a>
         <h1 className='title'>&lt;neodoc&gt;</h1>
         <h5 className='subtitle'>Beautiful, handcrafted commandlines</h5>
-        <Playground/>
+        <Playground />
       </div>
     );
   }

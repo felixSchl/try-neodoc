@@ -47,7 +47,7 @@ export class Playground extends React.Component {
           <span>$ prog</span>
           <input type='text'
             value={this.props.argv}
-            onChange={this.props.setArgv}/>
+            onChange={this.props.setArgv} />
         </div>
 
         <div>
@@ -57,7 +57,7 @@ export class Playground extends React.Component {
                 type='checkbox'
                 checked={this.props.optionsFirst}
                 defaultChecked={this.props.optionsFirst}
-                onChange={this.props.setOptionsFirst}/>
+                onChange={this.props.setOptionsFirst} />
               <label htmlFor='options-first'>Enable options-first</label>
             </li>
 
@@ -66,7 +66,7 @@ export class Playground extends React.Component {
                 type='checkbox'
                 checked={this.props.smartOptions}
                 defaultChecked={this.props.smartOptions}
-                onChange={this.props.setSmartOptions}/>
+                onChange={this.props.setSmartOptions} />
               <label htmlFor='smart-options'>Enable smart-options</label>
             </li>
 
