@@ -7,6 +7,7 @@ export const NEODOC_SET_SOURCE = 'NEODOC_SET_SOURCE';
 export const NEODOC_SET_ARGV = 'NEODOC_SET_ARGV';
 export const NEODOC_SET_OPTS_FIRST = 'NEODOC_SET_OPTS_FIRST';
 export const NEODOC_SET_SMART_OPTS = 'NEODOC_SET_SMART_OPTS';
+export const NEODOC_SET_STOP_AT = 'NEODOC_SET_STOP_AT';
 
 type State = {
   source: string,
@@ -45,17 +46,25 @@ export function setSmartOptions (value: boolean): Action {
   };
 }
 
+export function setStopAt (value: boolean): Action {
+  return {
+    type: NEODOC_SET_STOP_AT,
+    payload: value
+  };
+}
+
 export const actions = {
   setSource,
   setArgv,
   setOptionsFirst,
-  setSmartOptions
+  setSmartOptions,
+  setStopAt
 };
 
-function run (text, argv, optionsFirst, smartOptions) {
+function run (text, argv, optionsFirst, smartOptions, stopAt) {
   let output = null;
   let error = null;
-  console.log(text, argv, optionsFirst, smartOptions);
+  let spec = null;
   try {
     output = neodoc.run(
       text,
@@ -63,9 +72,12 @@ function run (text, argv, optionsFirst, smartOptions) {
         argv: stringArgv(argv),
         dontExit: true,
         optionsFirst: optionsFirst,
-        smartOptions: smartOptions
+        smartOptions: smartOptions,
+        stopAt: stopAt
       }
     );
+    // maybe `.run(...)` should return this?
+    spec = neodoc.parse(text);
   } catch (e) {
     error = e;
   }
@@ -73,10 +85,12 @@ function run (text, argv, optionsFirst, smartOptions) {
   return {
     source: text,
     output: output,
+    spec: spec,
     argv: argv,
     error: error,
     optionsFirst: optionsFirst,
-    smartOptions: smartOptions
+    smartOptions: smartOptions,
+    stopAt: stopAt
   };
 }
 
@@ -87,7 +101,8 @@ const ACTION_HANDLERS = {
         action.payload,
         state.argv,
         state.optionsFirst,
-        state.smartOptions
+        state.smartOptions,
+        state.stopAt
       );
     },
   [NEODOC_SET_ARGV]:
@@ -96,7 +111,8 @@ const ACTION_HANDLERS = {
         state.source,
         action.payload,
         state.optionsFirst,
-        state.smartOptions
+        state.smartOptions,
+        state.stopAt
       );
     },
   [NEODOC_SET_OPTS_FIRST]:
@@ -105,7 +121,8 @@ const ACTION_HANDLERS = {
         state.source,
         state.argv,
         action.payload,
-        state.smartOptions
+        state.smartOptions,
+        state.stopAt
       );
     },
   [NEODOC_SET_SMART_OPTS]:
@@ -114,6 +131,17 @@ const ACTION_HANDLERS = {
         state.source,
         state.argv,
         state.optionsFirst,
+        action.payload,
+        state.stopAt
+      );
+    },
+  [NEODOC_SET_STOP_AT]:
+    (state: State, action: {payload: any}) => {
+      return run(
+        state.source,
+        state.argv,
+        state.optionsFirst,
+        state.smartOptions,
         action.payload
       );
     }
@@ -159,7 +187,8 @@ to read about a specific subcommand or concept.
   output: null,
   error: null,
   optionsFirst: true,
-  smartOptions: true
+  smartOptions: true,
+  stopAt: []
 };
 
 export default function counterReducer (
