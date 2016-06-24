@@ -74,7 +74,7 @@ export class Playground extends React.Component {
               <input name='stop-at'
                 type='text'
                 value={this.props.stopAt && this.props.stopAt.join(' ')}
-                onChange={this.props.setStopAt}/>
+                onChange={this.props.setStopAt} />
               <label htmlFor='stop-at'>
                 Stop at these options (space separated, e.g.: "-n -f")
               </label>
@@ -110,13 +110,13 @@ export class Playground extends React.Component {
         {
           (this.props.spec)
             ? <div className='output'>
-                <Codemirror
-                  value={JSON.stringify(this.props.spec, null, 2)}
-                  options={{
-                    readOnly: true,
-                    mode: 'json',
-                    theme: 'neo'
-                  }}/>
+              <Codemirror
+                value={JSON.stringify(this.props.spec, null, 2)}
+                options={{
+                  readOnly: true,
+                  mode: 'json',
+                  theme: 'neo'
+                }} />
             </div>
             : <div>N/A</div>
         }
