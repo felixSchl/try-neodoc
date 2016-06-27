@@ -1,8 +1,6 @@
 :global {
   @import 'base';
   @import 'vendor/normalize';
-  @import 'node_modules/codemirror/lib/codemirror';
-  @import 'node_modules/codemirror/theme/neo';
 
   // Some best-practice CSS that's useful for most apps
   // Just remove them if they're not what you want
@@ -26,7 +24,7 @@
   .container {
     margin-left: auto;
     margin-right: auto;
-    max-width: 720px;
+    max-width: 100%;
     padding: 1em;
 
     .title {
@@ -43,6 +41,7 @@
   }
 
   .playground {
+    background: black;
     .options {
       padding: 5px;
       margin: 0px;
@@ -51,16 +50,16 @@
       }
     }
 
-    .CodeMirror {
-      height: auto;
-      border: 1px solid #ccc;
-      .CodeMirror-cursor {
-        width: auto;
-        border: 0;
-        background: transparent;
-        background: rgba(0, 200, 0, .4);
-      }
-    }
+    // .CodeMirror {
+    //   height: auto;
+    //   border: 1px solid #ccc;
+    //   .CodeMirror-cursor {
+    //     width: auto;
+    //     border: 0;
+    //     background: transparent;
+    //     background: rgba(0, 200, 0, .4);
+    //   }
+    // }
 
     .command-line {
       border: 1px solid #ccc;
@@ -86,5 +85,22 @@
     .error {
       background-color: rgba(150, 0, 0, 0.1);
     }
+  }
+  .half-containers{
+    display: inline-block;
+    vertical-align: top;
+    width: 50%;
+    padding: 1rem;
+  }
+  .clearfix:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  .left-half {
+    background: grey;
+  }
+  .right-half {
+    background: rgba(211,211,211,1);
   }
 }

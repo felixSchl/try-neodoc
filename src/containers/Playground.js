@@ -4,6 +4,10 @@ import { connect } from 'react-redux';
 import { setSmartOptions, setSource, setArgv, setOptionsFirst, setStopAt
        } from 'redux/modules/neodoc';
 import Codemirror from 'react-codemirror';
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/mode/javascript/javascript';
+import markdown from 'codemirror/mode/markdown/markdown';
+import 'codemirror/theme/neo.css';
 
 export class Playground extends React.Component {
   props: Props;
@@ -26,14 +30,14 @@ export class Playground extends React.Component {
 
   render () {
     return (
-      <div className='playground'>
-        <div>
+      <div className='playground clearfix'>
+        <div className='half-containers left-half'>
           <Codemirror
             value={this.props.source}
             onChange={this.props.setSource}
             options={{
+              mode: 'javascript',
               readOnly: false,
-              theme: 'neo',
               extraKeys: {
                 'Tab': (cm) => {
                   cm.execCommand('insertSoftTab');
@@ -41,16 +45,24 @@ export class Playground extends React.Component {
               }
             }}
           />
+          <div className='command-line'>
+            <span>$ prog</span>
+            <Codemirror
+              value={this.props.argv}
+              onChange={this.props.setArgv}
+              options={{
+                mode: 'markdown',
+                readOnly: false,
+                extraKeys: {
+                  'Tab': (cm) => {
+                    cm.execCommand('insertSoftTab');
+                  }
+                }
+              }}
+          />
+          </div>
         </div>
-
-        <div className='command-line'>
-          <span>$ prog</span>
-          <input type='text'
-            value={this.props.argv}
-            onChange={this.props.setArgv} />
-        </div>
-
-        <div>
+        <div className='half-containers right-half'>
           <ul className='options'>
             <li>
               <input name='options-first'
@@ -80,31 +92,31 @@ export class Playground extends React.Component {
               </label>
             </li>
           </ul>
-        </div>
-        <div>
-        {
-          (this.props.error)
-            ? <div className='error' style={{whiteSpace: 'pre'}}>
-              <pre>
-                {
-                  this.props.error.message
-                }
-              </pre>
-            </div>
-            : <div className='output'>
-              <table>
-                <tbody>
-                {_.map(this.props.output, (v, k, i) => (
-                  <tr key={k}>
-                    <td>{k}</td>
-                    <td>&rarr;</td>
-                    <td>{JSON.stringify(v)}</td>
-                  </tr>
-                ))}
-                </tbody>
-              </table>
-            </div>
-        }
+          <div>
+            {
+              (this.props.error)
+                ? <div className='error' style={{whiteSpace: 'pre'}}>
+                  <pre>
+                    {
+                      this.props.error.message
+                    }
+                  </pre>
+                </div>
+                : <div className='output'>
+                  <table>
+                    <tbody>
+                    {_.map(this.props.output, (v, k, i) => (
+                      <tr key={k}>
+                        <td>{k}</td>
+                        <td>&rarr;</td>
+                        <td>{JSON.stringify(v)}</td>
+                      </tr>
+                    ))}
+                    </tbody>
+                  </table>
+                </div>
+            }
+          </div>
         </div>
         <div>
         {
