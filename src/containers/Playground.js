@@ -6,7 +6,6 @@ import { setSmartOptions, setSource, setArgv, setOptionsFirst, setStopAt
 import Codemirror from 'react-codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/javascript/javascript';
-import markdown from 'codemirror/mode/markdown/markdown';
 import 'codemirror/theme/neo.css';
 
 export class Playground extends React.Component {
@@ -130,7 +129,7 @@ export class Playground extends React.Component {
                   theme: 'neo'
                 }} />
             </div>
-            : <div>N/A</div>
+            : <div className='output'>N/A</div>
         }
         </div>
       </div>
