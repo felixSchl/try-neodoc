@@ -7,6 +7,7 @@ export const NEODOC_SET_SOURCE = 'NEODOC_SET_SOURCE';
 export const NEODOC_SET_ARGV = 'NEODOC_SET_ARGV';
 export const NEODOC_SET_OPTS_FIRST = 'NEODOC_SET_OPTS_FIRST';
 export const NEODOC_SET_SMART_OPTS = 'NEODOC_SET_SMART_OPTS';
+export const NEODOC_SET_REQUIRE_FLAGS = 'NEODOC_SET_REQUIRE_FLAGS';
 export const NEODOC_SET_STOP_AT = 'NEODOC_SET_STOP_AT';
 
 type State = {
@@ -16,6 +17,7 @@ type State = {
   argv: Array,
   optionsFirst: boolean,
   smartOptions: boolean,
+  spec: Object
 };
 
 export function setSource (value: string): Action {
@@ -46,6 +48,13 @@ export function setSmartOptions (value: boolean): Action {
   };
 }
 
+export function setRequireFlags (value: boolean): Action {
+  return {
+    type: NEODOC_SET_REQUIRE_FLAGS,
+    payload: value
+  };
+}
+
 export function setStopAt (value: boolean): Action {
   return {
     type: NEODOC_SET_STOP_AT,
@@ -58,92 +67,98 @@ export const actions = {
   setArgv,
   setOptionsFirst,
   setSmartOptions,
+  setRequireFlags,
   setStopAt
 };
 
-function run (text, argv, optionsFirst, smartOptions, stopAt) {
-  let output = null;
-  let error = null;
+function run (state, opts) {
   let spec = null;
-  try {
-    output = neodoc.run(
-      text,
-      {
-        argv: stringArgv(argv),
-        dontExit: true,
-        optionsFirst: optionsFirst,
-        smartOptions: smartOptions,
-        stopAt: stopAt
-      }
-    );
-    // maybe `.run(...)` should return this?
-    spec = neodoc.parse(text);
-  } catch (e) {
-    error = e;
+  let output = null;
+  let specError = null;
+  let userError = null;
+
+  opts = opts || {};
+
+  let source = or(opts.source, state.source);
+
+  if (source && (!state.source || source !== state.source)) {
+    try {
+      spec = neodoc.parse(source);
+    } catch (e) {
+      specError = e;
+    }
+  } else {
+    spec = state.spec;
+  }
+
+  if (spec) {
+    try {
+      output = neodoc.run(
+        spec,
+        {
+          dontExit: true,
+
+          argv: stringArgv(or(opts.argv, state.argv)),
+          optionsFirst: or(opts.optionsFirst, state.optionsFirst),
+          smartOptions: or(opts.smartOptions, state.smartOptions),
+          requireFlags: or(opts.requireFlags, state.requireFlags),
+          stopAt: or(opts.stopAt, state.stopAt)
+        }
+      );
+    } catch (e) {
+      userError = e;
+    }
   }
 
   return {
-    source: text,
-    output: output,
+    source: source,
+
     spec: spec,
-    argv: argv,
-    error: error,
-    optionsFirst: optionsFirst,
-    smartOptions: smartOptions,
-    stopAt: stopAt
+    specError: specError,
+
+    output: output,
+    userError: userError,
+
+    argv: or(opts.argv, state.argv),
+    optionsFirst: or(opts.optionsFirst, state.optionsFirst),
+    smartOptions: or(opts.smartOptions, state.smartOptions),
+    requireFlags: or(opts.requireFlags, state.requireFlags),
+    stopAt: or(opts.stopAt, state.stopAt)
   };
+
+  function or (a, b) {
+    if (a === undefined || a === null) {
+      return b;
+    } else {
+      return a;
+    }
+  }
 }
 
 const ACTION_HANDLERS = {
   [NEODOC_SET_SOURCE]:
     (state: State, action: {payload: string}): string => {
-      return run(
-        action.payload,
-        state.argv,
-        state.optionsFirst,
-        state.smartOptions,
-        state.stopAt
-      );
+      return run(state, { source: action.payload });
     },
   [NEODOC_SET_ARGV]:
     (state: State, action: {payload: string}): string => {
-      return run(
-        state.source,
-        action.payload,
-        state.optionsFirst,
-        state.smartOptions,
-        state.stopAt
-      );
+      return run(state, { argv: action.payload });
     },
   [NEODOC_SET_OPTS_FIRST]:
     (state: State, action: {payload: boolean}): boolean => {
-      return run(
-        state.source,
-        state.argv,
-        action.payload,
-        state.smartOptions,
-        state.stopAt
-      );
+      return run(state, { optionsFirst: action.payload });
     },
   [NEODOC_SET_SMART_OPTS]:
     (state: State, action: {payload: boolean}): boolean => {
-      return run(
-        state.source,
-        state.argv,
-        state.optionsFirst,
-        action.payload,
-        state.stopAt
-      );
+      return run(state, { smartOptions: action.payload });
     },
   [NEODOC_SET_STOP_AT]:
     (state: State, action: {payload: any}) => {
-      return run(
-        state.source,
-        state.argv,
-        state.optionsFirst,
-        state.smartOptions,
-        action.payload
-      );
+      return run(state, { stopAt: action.payload });
+    },
+  [NEODOC_SET_REQUIRE_FLAGS]:
+    (state: State, action: {payload: boolean}) => {
+      return run(state, { requireFlags: action.payload });
     }
 };
 
@@ -185,9 +200,12 @@ to read about a specific subcommand or concept.
 `,
   argv: '',
   output: null,
-  error: null,
+  spec: null,
+  userError: null,
+  specError: null,
   optionsFirst: true,
   smartOptions: true,
+  requireFlags: true,
   stopAt: []
 };
 
