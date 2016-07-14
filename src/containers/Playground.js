@@ -22,6 +22,8 @@ export class Playground extends React.Component {
     optionsFirst: PropTypes.bool,
     smartOptions: PropTypes.bool,
     requireFlags: PropTypes.bool,
+    parseTime: PropTypes.number,
+    runTime: PropTypes.number,
     spec: PropTypes.object,
     userError: PropTypes.object,
     specError: PropTypes.object,
@@ -31,108 +33,130 @@ export class Playground extends React.Component {
   render () {
     return (
       <div className='playground'>
-        <div>
-          <Codemirror
-            value={this.props.source}
-            onChange={this.props.setSource}
-            options={{
-              readOnly: false,
-              theme: 'neo',
-              extraKeys: {
-                'Tab': (cm) => {
-                  cm.execCommand('insertSoftTab');
+        <div id='main'>
+          <div>
+            <Codemirror
+              value={this.props.source}
+              onChange={this.props.setSource}
+              options={{
+                readOnly: false,
+                theme: 'neo',
+                extraKeys: {
+                  'Tab': (cm) => {
+                    cm.execCommand('insertSoftTab');
+                  }
                 }
+              }}
+            />
+          </div>
+
+          <div id='argv'>
+            <div>
+              <div>
+              {
+                (this.props.userError || this.props.specError)
+                  ? <div className='error' style={{whiteSpace: 'pre'}}>
+                    <pre>
+                      {
+                        (this.props.userError || this.props.specError).message
+                      }
+                    </pre>
+                  </div>
+                  : null
               }
-            }}
-          />
-        </div>
-
-        <div className='command-line'>
-          <span>$ prog</span>
-          <input type='text'
-            value={this.props.argv}
-            onChange={this.props.setArgv} />
-        </div>
-
-        <div>
-          <ul className='options'>
-            <li>
-              <input name='options-first'
-                type='checkbox'
-                checked={this.props.optionsFirst}
-                defaultChecked={this.props.optionsFirst}
-                onChange={this.props.setOptionsFirst} />
-              <label htmlFor='options-first'>Enable options-first</label>
-            </li>
-
-            <li>
-              <input name='smart-options'
-                type='checkbox'
-                checked={this.props.smartOptions}
-                defaultChecked={this.props.smartOptions}
-                onChange={this.props.setSmartOptions} />
-              <label htmlFor='smart-options'>Enable smart-options</label>
-            </li>
-
-            <li>
-              <input name='require-flags'
-                type='checkbox'
-                checked={this.props.requireFlags}
-                defaultChecked={this.props.requireFlags}
-                onChange={this.props.setRequireFlags} />
-              <label htmlFor='require-flags'>Require flags be matched explicitly</label>
-            </li>
-
-            <li>
-              <input name='stop-at'
-                type='text'
-                value={this.props.stopAt && this.props.stopAt.join(' ')}
-                onChange={this.props.setStopAt} />
-              <label htmlFor='stop-at'>
-                Stop at these options (space separated, e.g.: "-n -f")
-              </label>
-            </li>
-          </ul>
-        </div>
-        <div>
-        {
-          (this.props.userError || this.props.specError)
-            ? <div className='error' style={{whiteSpace: 'pre'}}>
-              <pre>
-                {
-                  (this.props.userError || this.props.specError).message
-                }
-              </pre>
+              </div>
             </div>
-            : <div className='output'>
-              <table>
-                <tbody>
-                {_.map(this.props.output, (v, k, i) => (
-                  <tr key={k}>
-                    <td>{k}</td>
-                    <td>&rarr;</td>
-                    <td>{JSON.stringify(v)}</td>
-                  </tr>
-                ))}
-                </tbody>
-              </table>
+            <div className='command-line'>
+              <span>$ prog</span>
+              <input type='text'
+                value={this.props.argv}
+                onChange={this.props.setArgv} />
             </div>
-        }
+          </div>
         </div>
-        <div>
-        {/*
-          (this.props.spec)
-            ? <div className='output'>
-              <Codemirror
-                value={JSON.stringify(this.props.spec, null, 2)}
-                options={{
-                  readOnly: true,
-                  mode: 'json',
-                  theme: 'neo'
-                }} />
+
+        <div id='right'>
+          <div>
+            <h4>options</h4>
+            <ul className='options'>
+              <li>
+                <input id='options-first'
+                  type='checkbox'
+                  checked={this.props.optionsFirst}
+                  defaultChecked={this.props.optionsFirst}
+                  onChange={this.props.setOptionsFirst} />
+                <label htmlFor='options-first' className='right'>
+                  Enable options-first
+                </label>
+              </li>
+
+              <li>
+                <input id='smart-options'
+                  type='checkbox'
+                  checked={this.props.smartOptions}
+                  defaultChecked={this.props.smartOptions}
+                  onChange={this.props.setSmartOptions} />
+                <label htmlFor='smart-options' className='right'>
+                  Enable smart-options
+                </label>
+              </li>
+
+              <li>
+                <input id='require-flags'
+                  type='checkbox'
+                  checked={this.props.requireFlags}
+                  defaultChecked={this.props.requireFlags}
+                  onChange={this.props.setRequireFlags} />
+                <label htmlFor='require-flags' className='right'>
+                  Require flags be matched explicitly
+                </label>
+              </li>
+
+              <li>
+                <label htmlFor='stop-at'>
+                  Stop at these options:
+                </label>
+                <input id='stop-at'
+                  type='text'
+                  value={this.props.stopAt && this.props.stopAt.join(' ')}
+                  onChange={this.props.setStopAt} />
+                <label htmlFor='stop-at'>
+                  (space separated, e.g.: "-n -f")
+                </label>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4>timing</h4>
+            <ul>
+              <li>parsed spec in {this.props.parseTime}ms</li>
+              <li>parsed argv in {this.props.runTime}ms</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4>output</h4>
+            <div className='output'>
+              {
+                (this.props.output)
+                  ? <table>
+                      <tbody>
+                      {_.map(_.keys(this.props.output), (k, i) => (
+                        <tr key={k} className={i % 2 === 0 ? 'even' : 'odd'}>
+                          <td>{k}</td>
+                          <td>&rarr;</td>
+                          <td>{JSON.stringify(this.props.output[k])}</td>
+                        </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  : 'N/A'
+              }
             </div>
-            : <div>N/A</div>
-        */}
+          </div>
+        </div>
+        <div className='clear-fix'>
         </div>
       </div>
     );
@@ -149,7 +173,9 @@ const mapStateToProps = (state) => ({
   smartOptions: state.neodoc.smartOptions,
   requireFlags: state.neodoc.requireFlags,
   stopAt: state.neodoc.stopAt,
-  spec: state.neodoc.spec
+  spec: state.neodoc.spec,
+  parseTime: state.neodoc.parseTime,
+  runTime: state.neodoc.runTime
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -26,8 +26,35 @@
   .container {
     margin-left: auto;
     margin-right: auto;
-    max-width: 720px;
+    max-width: 1280px;
     padding: 1em;
+
+    #main {
+      float: left;
+      width: 720px;
+      padding-right: 24px;
+    }
+
+    #argv {
+      width: 720px - 24px /*padding*/;
+      background: white;
+
+      .output {
+        margin: 24px 0;
+
+        table {
+          width: 720px - 24px /*padding*/;
+
+          tr.odd {
+            background: rgba(0.5, 0.5, 0.5, 0.1);
+          }
+
+          td {
+            padding: 0 16px;
+          }
+        }
+      }
+    }
 
     .title {
       padding-bottom: 0;
@@ -43,6 +70,8 @@
   }
 
   .playground {
+    border: 1px solid gray;
+
     .options {
       padding: 5px;
       margin: 0px;
@@ -52,8 +81,12 @@
     }
 
     .CodeMirror {
-      height: auto;
+      height: 640px;
+      padding-left: 8px;
       border: 1px solid #ccc;
+      border-left: none;
+      border-top: none;
+
       .CodeMirror-cursor {
         width: auto;
         border: 0;
@@ -86,5 +119,13 @@
     .error {
       background-color: rgba(150, 0, 0, 0.1);
     }
+  }
+
+  label.right {
+    padding-right: 0.5em;
+  }
+
+  .clear-fix {
+    clear: both;
   }
 }

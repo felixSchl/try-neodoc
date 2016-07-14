@@ -17,7 +17,9 @@ type State = {
   argv: Array,
   optionsFirst: boolean,
   smartOptions: boolean,
-  spec: Object
+  spec: Object,
+  parseTime: Number,
+  runTime: Number
 };
 
 export function setSource (value: string): Action {
@@ -76,22 +78,28 @@ function run (state, opts) {
   let output = null;
   let specError = null;
   let userError = null;
+  let parseTime = null;
+  let runTime = null;
 
   opts = opts || {};
 
   let source = or(opts.source, state.source);
 
   if (source && (!state.source || source !== state.source)) {
+    const now = Date.now();
     try {
       spec = neodoc.parse(source);
     } catch (e) {
       specError = e;
     }
+    parseTime = Date.now() - now;
   } else {
     spec = state.spec;
+    parseTime = state.parseTime;
   }
 
   if (spec) {
+    const now = Date.now();
     try {
       output = neodoc.run(
         spec,
@@ -108,6 +116,9 @@ function run (state, opts) {
     } catch (e) {
       userError = e;
     }
+    runTime = Date.now() - now;
+  } else {
+    runTime = state.runTime;
   }
 
   return {
@@ -123,7 +134,10 @@ function run (state, opts) {
     optionsFirst: or(opts.optionsFirst, state.optionsFirst),
     smartOptions: or(opts.smartOptions, state.smartOptions),
     requireFlags: or(opts.requireFlags, state.requireFlags),
-    stopAt: or(opts.stopAt, state.stopAt)
+    stopAt: or(opts.stopAt, state.stopAt),
+
+    parseTime: parseTime,
+    runTime: runTime
   };
 
   function or (a, b) {
@@ -203,6 +217,8 @@ to read about a specific subcommand or concept.
   spec: null,
   userError: null,
   specError: null,
+  parseTime: null,
+  runTime: null,
   optionsFirst: true,
   smartOptions: true,
   requireFlags: true,
