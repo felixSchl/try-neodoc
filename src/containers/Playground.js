@@ -141,16 +141,16 @@ export class Playground extends React.Component {
               {
                 (this.props.output)
                   ? <table>
-                      <tbody>
-                      {_.map(_.keys(this.props.output), (k, i) => (
-                        <tr key={k} className={i % 2 === 0 ? 'even' : 'odd'}>
-                          <td>{k}</td>
-                          <td>&rarr;</td>
-                          <td>{JSON.stringify(this.props.output[k])}</td>
-                        </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                    <tbody>
+                    {_.map(_.keys(this.props.output), (k, i) => (
+                      <tr key={k} className={i % 2 === 0 ? 'even' : 'odd'}>
+                        <td>{k}</td>
+                        <td>&rarr;</td>
+                        <td>{JSON.stringify(this.props.output[k])}</td>
+                      </tr>
+                      ))}
+                    </tbody>
+                  </table>
                   : 'N/A'
               }
             </div>
