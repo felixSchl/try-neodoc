@@ -176,7 +176,7 @@ const ACTION_HANDLERS = {
     }
 };
 
-const initialState = {
+const initialState = run({}, {
   source:
 `\
 usage: git [--version] [--help] [-C <path>] [-c <name=value>]
@@ -223,7 +223,7 @@ to read about a specific subcommand or concept.
   smartOptions: true,
   requireFlags: true,
   stopAt: []
-};
+});
 
 export default function counterReducer (
   state: State = initialState,
