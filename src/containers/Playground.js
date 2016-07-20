@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { setSmartOptions, setSource, setArgv, setOptionsFirst, setStopAt,
-         setRequireFlags
+         setRequireFlags, setLaxPlacement
        } from 'redux/modules/neodoc';
 import Codemirror from 'react-codemirror';
 
@@ -18,10 +18,12 @@ export class Playground extends React.Component {
     setOptionsFirst: PropTypes.func.isRequired,
     setSmartOptions: PropTypes.func.isRequired,
     setRequireFlags: PropTypes.func.isRequired,
+    setLaxPlacement: PropTypes.func.isRequired,
     setStopAt: PropTypes.func.isRequired,
     optionsFirst: PropTypes.bool,
     smartOptions: PropTypes.bool,
     requireFlags: PropTypes.bool,
+    laxPlacement: PropTypes.bool,
     parseTime: PropTypes.number,
     runTime: PropTypes.number,
     spec: PropTypes.object,
@@ -113,6 +115,18 @@ export class Playground extends React.Component {
               </li>
 
               <li>
+                <input id='lax-placement'
+                  type='checkbox'
+                  checked={this.props.laxPlacement}
+                  defaultChecked={this.props.laxPlacement}
+                  onChange={this.props.setLaxPlacement} />
+                <label htmlFor='lax-placement' className='right'>
+                  Positions do not matter (lax placement)
+                  <sub>&mdash; new in v0.9.0</sub>
+                </label>
+              </li>
+
+              <li>
                 <label htmlFor='stop-at'>
                   Stop at these options:
                 </label>
@@ -172,6 +186,7 @@ const mapStateToProps = (state) => ({
   optionsFirst: state.neodoc.optionsFirst,
   smartOptions: state.neodoc.smartOptions,
   requireFlags: state.neodoc.requireFlags,
+  laxPlacement: state.neodoc.laxPlacement,
   stopAt: state.neodoc.stopAt,
   spec: state.neodoc.spec,
   parseTime: state.neodoc.parseTime,
@@ -184,6 +199,7 @@ const mapDispatchToProps = (dispatch) => ({
   setOptionsFirst: (event) => dispatch(setOptionsFirst(event.target.checked)),
   setSmartOptions: (event) => dispatch(setSmartOptions(event.target.checked)),
   setRequireFlags: (event) => dispatch(setRequireFlags(event.target.checked)),
+  setLaxPlacement: (event) => dispatch(setLaxPlacement(event.target.checked)),
   setStopAt: (event) => dispatch(setStopAt(event.target.value.split(' ')))
 });
 

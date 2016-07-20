@@ -9,6 +9,7 @@ export const NEODOC_SET_OPTS_FIRST = 'NEODOC_SET_OPTS_FIRST';
 export const NEODOC_SET_SMART_OPTS = 'NEODOC_SET_SMART_OPTS';
 export const NEODOC_SET_REQUIRE_FLAGS = 'NEODOC_SET_REQUIRE_FLAGS';
 export const NEODOC_SET_STOP_AT = 'NEODOC_SET_STOP_AT';
+export const NEODOC_SET_LAX_PLACEMENT = 'NEODOC_SET_LAX_PLACEMENT';
 
 type State = {
   source: string,
@@ -17,6 +18,7 @@ type State = {
   argv: Array,
   optionsFirst: boolean,
   smartOptions: boolean,
+  laxPlacement: boolean,
   spec: Object,
   parseTime: Number,
   runTime: Number
@@ -57,6 +59,13 @@ export function setRequireFlags (value: boolean): Action {
   };
 }
 
+export function setLaxPlacement (value: boolean): Action {
+  return {
+    type: NEODOC_SET_LAX_PLACEMENT,
+    payload: value
+  };
+}
+
 export function setStopAt (value: boolean): Action {
   return {
     type: NEODOC_SET_STOP_AT,
@@ -70,6 +79,7 @@ export const actions = {
   setOptionsFirst,
   setSmartOptions,
   setRequireFlags,
+  setLaxPlacement,
   setStopAt
 };
 
@@ -110,6 +120,7 @@ function run (state, opts) {
           optionsFirst: or(opts.optionsFirst, state.optionsFirst),
           smartOptions: or(opts.smartOptions, state.smartOptions),
           requireFlags: or(opts.requireFlags, state.requireFlags),
+          laxPlacement: or(opts.laxPlacement, state.laxPlacement),
           stopAt: or(opts.stopAt, state.stopAt)
         }
       );
@@ -133,7 +144,7 @@ function run (state, opts) {
     argv: or(opts.argv, state.argv),
     optionsFirst: or(opts.optionsFirst, state.optionsFirst),
     smartOptions: or(opts.smartOptions, state.smartOptions),
-    requireFlags: or(opts.requireFlags, state.requireFlags),
+    laxPlacement: or(opts.laxPlacement, state.laxPlacement),
     stopAt: or(opts.stopAt, state.stopAt),
 
     parseTime: parseTime,
@@ -173,6 +184,10 @@ const ACTION_HANDLERS = {
   [NEODOC_SET_REQUIRE_FLAGS]:
     (state: State, action: {payload: boolean}) => {
       return run(state, { requireFlags: action.payload });
+    },
+  [NEODOC_SET_LAX_PLACEMENT]:
+    (state: State, action: {payload: boolean}) => {
+      return run(state, { laxPlacement: action.payload });
     }
 };
 
@@ -221,7 +236,8 @@ to read about a specific subcommand or concept.
   runTime: null,
   optionsFirst: true,
   smartOptions: true,
-  requireFlags: true,
+  requireFlags: false,
+  laxPlacement: false,
   stopAt: []
 });
 
