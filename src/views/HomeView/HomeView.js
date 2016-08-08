@@ -22,7 +22,7 @@ export class HomeView extends React.Component {
             data-canonical-src={forkmeCanonical} />
         </a>
         <h1 className='title'>&lt;neodoc&gt;</h1>
-        <h5 className='subtitle'>Beautiful, handcrafted commandlines <sub>v0.9.0</sub></h5>
+        <h5 className='subtitle'>Beautiful, handcrafted commandlines <sub>v0.10.0</sub></h5>
         <Playground />
       </div>
     );
