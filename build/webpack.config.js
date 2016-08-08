@@ -20,7 +20,8 @@ const webpackConfig = {
     extensions: ['', '.js', '.jsx', '.json'],
     modulesDirectories: ['node_modules'],
     alias: {
-      'neodoc': path.resolve(__dirname, '../node_modules/neodoc'),
+      'neodoc': require.resolve('neodoc'),
+      'fs': path.resolve('fake/fs.js')
     },
     fallback: [path.join(__dirname, 'node_modules')]
   },
@@ -29,6 +30,7 @@ const webpackConfig = {
   },
   module: {}
 };
+
 // ------------------------------------
 // Entry Points
 // ------------------------------------
