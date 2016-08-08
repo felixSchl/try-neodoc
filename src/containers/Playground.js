@@ -79,9 +79,12 @@ export class Playground extends React.Component {
 
         <div id='right'>
           <div>
-            <h4>options</h4>
+            <h3>options</h3>
+            <div className='subtitle'>
+              Configure the behavior of neodoc using these options.
+            </div>
             <ul className='options'>
-              <li>
+              <li className='option important'>
                 <input id='options-first'
                   type='checkbox'
                   checked={this.props.optionsFirst}
@@ -92,7 +95,7 @@ export class Playground extends React.Component {
                 </label>
               </li>
 
-              <li>
+              <li className='option important'>
                 <input id='smart-options'
                   type='checkbox'
                   checked={this.props.smartOptions}
@@ -103,7 +106,7 @@ export class Playground extends React.Component {
                 </label>
               </li>
 
-              <li>
+              <li className='option important'>
                 <input id='require-flags'
                   type='checkbox'
                   checked={this.props.requireFlags}
@@ -114,7 +117,7 @@ export class Playground extends React.Component {
                 </label>
               </li>
 
-              <li>
+              <li className='option important'>
                 <input id='lax-placement'
                   type='checkbox'
                   checked={this.props.laxPlacement}
@@ -126,26 +129,31 @@ export class Playground extends React.Component {
                 </label>
               </li>
 
-              <li>
-                <label htmlFor='stop-at'>
+              <li className='option complex'>
+                <label htmlFor='stop-at' className='above'>
                   Stop at these options:
                 </label>
                 <input id='stop-at'
                   type='text'
                   value={this.props.stopAt && this.props.stopAt.join(' ')}
                   onChange={this.props.setStopAt} />
-                <label htmlFor='stop-at'>
-                  (space separated, e.g.: "-n -f")
+                <label htmlFor='stop-at' className='below explanation'>
+                  space separated, e.g.: "-n -f"
                 </label>
               </li>
             </ul>
           </div>
 
-          <div>
+          <div className='timing'>
             <h4>timing</h4>
             <ul>
-              <li>parsed spec in {this.props.parseTime}ms</li>
-              <li>parsed argv in {this.props.runTime}ms</li>
+              <li>parsed spec in <span className='ms'>{
+                this.props.parseTime
+              }ms</span></li>
+
+              <li>parsed argv in <span className='ms'>{
+                this.props.runTime
+              }ms</span></li>
             </ul>
           </div>
 
