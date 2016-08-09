@@ -183,23 +183,28 @@ export class Playground extends React.Component {
             </ul>
           </div>
 
-          <div>
+          <div className='output'>
             <h4>output</h4>
-            <div className='output'>
+            <div className='success'>
               {
-                (this.props.output)
-                  ? <table>
-                    <tbody>
-                    {_.map(_.keys(this.props.output), (k, i) => (
-                      <tr key={k} className={i % 2 === 0 ? 'even' : 'odd'}>
-                        <td>{k}</td>
-                        <td>&rarr;</td>
-                        <td>{JSON.stringify(this.props.output[k])}</td>
-                      </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                  : 'N/A'
+                (() => {
+                  const keys = this.props.output && _.keys(this.props.output);
+                  return keys
+                    ? keys.length === 0
+                      ? <span className='empty'>empty</span>
+                      : <table>
+                        <tbody>
+                          {_.map(keys, (k, i) => (
+                            <tr key={k} className={i % 2 === 0 ? 'even' : 'odd'}>
+                              <td>{k}</td>
+                              <td>&rarr;</td>
+                              <td>{JSON.stringify(this.props.output[k])}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    : 'N/A';
+                })()
               }
             </div>
           </div>

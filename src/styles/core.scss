@@ -134,7 +134,14 @@
     }
 
     .output {
-      background-color: rgba(0, 150, 100, 0.1);
+      .success {
+        background-color: rgba(0, 150, 100, 0.1);
+      }
+
+      .empty {
+        color: gray;
+        font-style: italic;
+      }
     }
 
     .error {
