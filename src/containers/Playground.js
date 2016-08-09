@@ -5,6 +5,7 @@ import { setSmartOptions, setSource, setArgv, setOptionsFirst, setStopAt,
          setRequireFlags, setLaxPlacement
        } from 'redux/modules/neodoc';
 import Codemirror from 'react-codemirror';
+require('codemirror/addon/display/rulers');
 
 export class Playground extends React.Component {
   props: Props;
@@ -32,6 +33,25 @@ export class Playground extends React.Component {
     output: PropTypes.object
   };
 
+  constructor (...args) {
+    super(...args);
+    this.state = {
+      lineNumbers: false
+    };
+  }
+
+  componentDidMount () {
+    // note: this is a hack to get around line numbers not showing correctly
+    // when set to 'true' intially. It's unclear why, but the CodeMirror gutter
+    // would assume a very large width (1000+ px) if 'lineNumbers' is set to
+    // 'true' on startup.
+    if (!this.state.lineNumbers) {
+      this.setState({
+        lineNumbers: true
+      });
+    }
+  }
+
   render () {
     return (
       <div className='playground'>
@@ -47,7 +67,13 @@ export class Playground extends React.Component {
                   'Tab': (cm) => {
                     cm.execCommand('insertSoftTab');
                   }
-                }
+                },
+                lineNumbers: this.state.lineNumbers,
+                rulers: [
+                  {
+                    column: 80
+                  }
+                ]
               }}
             />
           </div>
