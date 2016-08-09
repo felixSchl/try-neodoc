@@ -23,16 +23,32 @@
     box-sizing: inherit;
   }
 
+  .CodeMirror-ruler {
+    border-left: 1px dashed #ccc;
+  }
+
   .container {
     padding: 1em;
+    width: 100%;
     padding-left: 150px;
+    position: relative;
+    display: table;
+    border-spacing: 0;
 
     #main {
-      float: left;
+      padding: 0;
       padding-right: 24px;
+      width: 100%;
+      display: table-cell;
+      vertical-align: top;
     }
 
     #right {
+      padding: 0;
+      min-width: 300px;
+      max-width: 500px;
+      display: table-cell;
+      vertical-align: top;
     }
 
     #argv {
@@ -68,6 +84,7 @@
 
   .playground {
     border: 1px solid gray;
+    position: relative;
 
     h3 {
       margin-bottom: 0.5em;
@@ -105,7 +122,6 @@
 
     .CodeMirror {
       height: 640px;
-      padding-left: 8px;
       border: 1px solid #ccc;
       border-left: none;
       border-top: none;
