@@ -106,9 +106,6 @@ export class Playground extends React.Component {
         <div id='right'>
           <div>
             <h3>options</h3>
-            <div className='subtitle'>
-              Configure the behavior of neodoc using these options.
-            </div>
             <ul className='options'>
               <li className='option important'>
                 <input id='options-first'
@@ -177,10 +174,18 @@ export class Playground extends React.Component {
                 this.props.parseTime
               }ms</span></li>
 
-              <li>parsed argv in <span className='ms'>{
+              <li>parsed argv in <span className='ms argv'>{
                 this.props.runTime
               }ms</span></li>
             </ul>
+            <div className='subtitle'>
+              <p>
+                <b>Important Note:</b> Since the neodoc parse output is just
+                JSON, it can cached or even shipped with the cli, reducing the
+                total time to the latter of these two numbers (rather than the
+                sum).
+              </p>
+            </div>
           </div>
 
           <div className='output'>

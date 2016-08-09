@@ -31,6 +31,7 @@
     padding: 1em;
     width: 100%;
     padding-left: 150px;
+    padding-right: 50px;
     position: relative;
     display: table;
     border-spacing: 0;
@@ -66,6 +67,10 @@
             padding: 0 16px;
           }
         }
+      }
+
+      input {
+        width: 80%;
       }
     }
 
@@ -114,6 +119,10 @@
     .timing {
       span.ms {
         font-style: italic;
+      }
+
+      span.ms.argv {
+        font-weight: bold;
       }
 
       li {
