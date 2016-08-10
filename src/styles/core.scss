@@ -2,7 +2,8 @@
   @import 'base';
   @import 'vendor/normalize';
   @import 'node_modules/codemirror/lib/codemirror';
-  @import 'node_modules/codemirror/theme/neo';
+  @import 'node_modules/codemirror/theme/tomorrow-night-eighties';
+  @import 'node_modules/codemirror/theme/dracula';
 
   // Some best-practice CSS that's useful for most apps
   // Just remove them if they're not what you want
@@ -25,54 +26,24 @@
 
   .CodeMirror-ruler {
     border-left: 1px dashed #ccc;
+    border-left-color: #777;
   }
 
-  .container {
+  .cm-s-dracula { /* theme overrides */
+    .CodeMirror-gutters {
+      background-color: #111221 !important;
+    }
+  }
+
+  #container {
     padding: 1em;
     width: 100%;
     padding-left: 150px;
     padding-right: 50px;
     position: relative;
-    display: table;
     border-spacing: 0;
+    margin: 0 auto;
 
-    #main {
-      padding: 0;
-      padding-right: 24px;
-      width: 100%;
-      display: table-cell;
-      vertical-align: top;
-    }
-
-    #right {
-      padding: 0;
-      min-width: 300px;
-      max-width: 500px;
-      display: table-cell;
-      vertical-align: top;
-    }
-
-    #argv {
-      background: white;
-
-      .output {
-        margin: 24px 0;
-
-        table {
-          tr.odd {
-            background: rgba(0.5, 0.5, 0.5, 0.1);
-          }
-
-          td {
-            padding: 0 16px;
-          }
-        }
-      }
-
-      input {
-        width: 80%;
-      }
-    }
 
     .title {
       padding-bottom: 0;
@@ -85,14 +56,66 @@
       font-weight: normal;
       font-style: italic;
     }
-  }
-
-  .playground {
-    border: 1px solid gray;
-    position: relative;
 
     h3 {
       margin-bottom: 0.5em;
+    }
+  }
+
+  #playground {
+    position: relative;
+    max-width: 1200px;
+    display: table;
+
+    #main {
+      padding: 0;
+      width: 100%;
+      display: table-cell;
+      position: relative;
+      vertical-align: top;
+    }
+
+    #right {
+      padding: 0;
+      padding-left: 0.5em;
+      min-width: 300px;
+      max-width: 500px;
+      display: table-cell;
+      vertical-align: top;
+      box-shadow: -10px 0 15px -12px #222;
+      position: relative;
+    }
+
+    #argv {
+      height: 2em;
+      background: white;
+
+      #output {
+        margin: 24px 0;
+
+        table {
+          tr.odd {
+            background: rgba(0.5, 0.5, 0.5, 0.1);
+          }
+
+          td {
+            padding: 0 16px;
+          }
+        }
+
+        .success {
+          background-color: rgba(0, 150, 100, 0.1);
+        }
+
+        .empty {
+          color: gray;
+          font-style: italic;
+        }
+      }
+
+      input {
+        width: 80%;
+      }
     }
 
     .subtitle {
@@ -100,23 +123,25 @@
       font-size: 0.75em;
     }
 
-    .options {
-      padding: 5px;
-      margin: 0px;
-      li {
-        list-style-type: none;
+    #options {
+      ul {
+        padding: 5px;
+        margin: 0px;
+        li {
+          list-style-type: none;
 
-        &.complex {
-          padding-top: 8px;
-          padding-bottom: 8px;
-        }
+          &.complex {
+            padding-top: 8px;
+            padding-bottom: 8px;
+          }
 
-        &.important {
+          &.important {
+          }
         }
       }
     }
 
-    .timing {
+    #timing {
       span.ms {
         font-style: italic;
       }
@@ -131,7 +156,6 @@
 
     .CodeMirror {
       height: 640px;
-      border: 1px solid #ccc;
       border-left: none;
       border-top: none;
 
@@ -139,7 +163,7 @@
         width: auto;
         border: 0;
         background: transparent;
-        background: rgba(0, 200, 0, .4);
+        background: rgba(100, 100, 255, .8);
       }
     }
 
@@ -158,19 +182,17 @@
       }
     }
 
-    .output {
-      .success {
-        background-color: rgba(0, 150, 100, 0.1);
-      }
+    #error {
+      background-color: rgba(255, 98, 98, 0.85);
+      position: absolute;
+      bottom: 2em; /* height of argv */
+      z-index: 200;
+      width: 100%;
 
-      .empty {
-        color: gray;
-        font-style: italic;
+      pre {
+        margin: 0;
+        padding: 0.5em;
       }
-    }
-
-    .error {
-      background-color: rgba(150, 0, 0, 0.1);
     }
   }
 
@@ -185,6 +207,10 @@
 
     &.right {
       padding-left: 0.5em;
+    }
+
+    &.left {
+      padding-right: 0.5em;
     }
 
     &.explanation {

@@ -225,10 +225,10 @@ Options:
   stopAt: []
 });
 
-export default function counterReducer (
+export default function neodocReducer (
   state: State = initialState,
   action: Action
-): number {
+) {
   const handler = ACTION_HANDLERS[action.type];
   return handler ? handler(state, action) : state;
 }

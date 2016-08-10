@@ -10,7 +10,7 @@ export class HomeView extends React.Component {
     /* eslint-enable */
 
     return (
-      <div className='container'>
+      <div id='container'>
         <a href='https://github.com/felixschl/neodoc'>
           <img style={{
             position: 'absolute',

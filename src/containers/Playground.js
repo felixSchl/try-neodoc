@@ -4,8 +4,11 @@ import { connect } from 'react-redux';
 import { setSmartOptions, setSource, setArgv, setOptionsFirst, setStopAt,
          setRequireFlags, setLaxPlacement
        } from 'redux/modules/neodoc';
+import { setKeybindings } from 'redux/modules/editor';
 import Codemirror from 'react-codemirror';
 require('codemirror/addon/display/rulers');
+require('codemirror/keymap/vim');
+require('codemirror/keymap/emacs');
 
 export class Playground extends React.Component {
   props: Props;
@@ -30,11 +33,14 @@ export class Playground extends React.Component {
     spec: PropTypes.object,
     userError: PropTypes.object,
     specError: PropTypes.object,
-    output: PropTypes.object
+    output: PropTypes.object,
+    setKeybindings: PropTypes.func,
+    keybindings: PropTypes.string
   };
 
   constructor (...args) {
     super(...args);
+
     this.state = {
       lineNumbers: false
     };
@@ -54,7 +60,7 @@ export class Playground extends React.Component {
 
   render () {
     return (
-      <div className='playground'>
+      <div id='playground'>
         <div id='main'>
           <div>
             <Codemirror
@@ -62,7 +68,8 @@ export class Playground extends React.Component {
               onChange={this.props.setSource}
               options={{
                 readOnly: false,
-                theme: 'neo',
+                // theme: 'tomorrow-night-eighties',
+                theme: 'dracula',
                 extraKeys: {
                   'Tab': (cm) => {
                     cm.execCommand('insertSoftTab');
@@ -73,17 +80,17 @@ export class Playground extends React.Component {
                   {
                     column: 80
                   }
-                ]
+                ],
+                keyMap: this.props.keybindings
               }}
             />
           </div>
 
           <div id='argv'>
             <div>
-              <div>
               {
                 (this.props.userError || this.props.specError)
-                  ? <div className='error' style={{whiteSpace: 'pre'}}>
+                  ? <div id='error' style={{whiteSpace: 'pre'}}>
                     <pre>
                       {
                         (this.props.userError || this.props.specError).message
@@ -92,7 +99,6 @@ export class Playground extends React.Component {
                   </div>
                   : null
               }
-              </div>
             </div>
             <div className='command-line'>
               <span>$ prog</span>
@@ -104,9 +110,9 @@ export class Playground extends React.Component {
         </div>
 
         <div id='right'>
-          <div>
+          <div id='options'>
             <h3>options</h3>
-            <ul className='options'>
+            <ul>
               <li className='option important'>
                 <input id='options-first'
                   type='checkbox'
@@ -167,7 +173,24 @@ export class Playground extends React.Component {
             </ul>
           </div>
 
-          <div className='timing'>
+          <div id='editor-settings'>
+            <h4>editor settings</h4>
+            <ul className='options'>
+              <li className='option'>
+                <label htmlFor='keybindings' className='left'>key bindings:</label>
+                <select name='keybindings'
+                  value={this.props.keybindings}
+                  onChange={this.props.setKeybindings}
+                  >
+                  <option value='default'>default</option>
+                  <option value='vim'>vim</option>
+                  <option value='emacs'>emacs</option>
+                </select>
+              </li>
+            </ul>
+          </div>
+
+          <div id='timing'>
             <h4>timing</h4>
             <ul>
               <li>parsed spec in <span className='ms'>{
@@ -188,7 +211,7 @@ export class Playground extends React.Component {
             </div>
           </div>
 
-          <div className='output'>
+          <div id='output'>
             <h4>output</h4>
             <div className='success'>
               {
@@ -234,7 +257,8 @@ const mapStateToProps = (state) => ({
   stopAt: state.neodoc.stopAt,
   spec: state.neodoc.spec,
   parseTime: state.neodoc.parseTime,
-  runTime: state.neodoc.runTime
+  runTime: state.neodoc.runTime,
+  keybindings: state.editor.keybindings
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -244,6 +268,7 @@ const mapDispatchToProps = (dispatch) => ({
   setSmartOptions: (event) => dispatch(setSmartOptions(event.target.checked)),
   setRequireFlags: (event) => dispatch(setRequireFlags(event.target.checked)),
   setLaxPlacement: (event) => dispatch(setLaxPlacement(event.target.checked)),
+  setKeybindings: (event) => dispatch(setKeybindings(event.target.value)),
   setStopAt: (event) => dispatch(setStopAt(event.target.value.split(' ')))
 });
 
