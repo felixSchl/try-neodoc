@@ -183,16 +183,39 @@
     }
 
     #error {
-      background-color: rgba(255, 98, 98, 0.85);
+      background-color: rgba(255, 106, 107, 0.86);
+      color: white;
       position: absolute;
-      bottom: 2em; /* height of argv */
+      bottom: 40px; /* height of argv */
       z-index: 200;
-      width: 100%;
+      right: 10px;
+      left: 10px;
+      border-radius: 10px;
+      border: 1px dotted #ccc;
+      margin: 5px;
 
       pre {
         margin: 0;
-        padding: 0.5em;
+        padding: 15px;
       }
+    }
+
+    .fade-enter {
+      opacity: 0.01;
+    }
+
+    .fade-enter.fade-enter-active {
+      opacity: 1;
+      transition: opacity 500ms cubic-bezier(0.190, 1.000, 0.220, 1.000);
+    }
+
+    .fade-leave {
+      opacity: 1;
+    }
+
+    .fade-leave.fade-leave-active {
+      opacity: 0.01;
+      transition: opacity 300ms cubic-bezier(0.190, 1.000, 0.220, 1.000);
     }
   }
 

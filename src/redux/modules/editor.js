@@ -1,4 +1,3 @@
-import _ from 'lodash';
 export const EDITOR_SET_KEYBINDINGS = 'EDITOR_SET_KEYBINDINGS';
 
 export function setKeybindings (value: string): Action {

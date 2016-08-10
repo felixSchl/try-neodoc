@@ -6,6 +6,7 @@ import { setSmartOptions, setSource, setArgv, setOptionsFirst, setStopAt,
        } from 'redux/modules/neodoc';
 import { setKeybindings } from 'redux/modules/editor';
 import Codemirror from 'react-codemirror';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 require('codemirror/addon/display/rulers');
 require('codemirror/keymap/vim');
 require('codemirror/keymap/emacs');
@@ -88,17 +89,23 @@ export class Playground extends React.Component {
 
           <div id='argv'>
             <div>
-              {
-                (this.props.userError || this.props.specError)
-                  ? <div id='error' style={{whiteSpace: 'pre'}}>
-                    <pre>
-                      {
-                        (this.props.userError || this.props.specError).message
-                      }
-                    </pre>
-                  </div>
-                  : null
-              }
+              <ReactCSSTransitionGroup
+                transitionName='fade'
+                transitionEnterTimeout={200}
+                transitionLeaveTimeout={200}
+              >
+                {
+                  (this.props.userError || this.props.specError)
+                    ? <div id='error' style={{whiteSpace: 'pre'}} key='neodoc-error'>
+                      <pre>
+                        {
+                          (this.props.userError || this.props.specError).message
+                        }
+                      </pre>
+                    </div>
+                    : null
+                }
+              </ReactCSSTransitionGroup>
             </div>
             <div className='command-line'>
               <span>$ prog</span>
