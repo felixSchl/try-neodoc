@@ -95,10 +95,15 @@ function run (state, opts) {
 
   let source = or(opts.source, state.source);
 
-  if (source && (!state.source || source !== state.source)) {
+  if (source && (
+      !state.source || source !== state.source ||
+        (opts.smartOptions !== state.smartOptions))
+  ) {
     const now = Date.now();
     try {
-      spec = neodoc.parse(source);
+      spec = neodoc.parse(source, {
+        smartOptions: or(opts.smartOptions, state.smartOptions)
+      });
     } catch (e) {
       specError = e;
     }
@@ -118,7 +123,6 @@ function run (state, opts) {
 
           argv: stringArgv(or(opts.argv, state.argv)),
           optionsFirst: or(opts.optionsFirst, state.optionsFirst),
-          smartOptions: or(opts.smartOptions, state.smartOptions),
           requireFlags: or(opts.requireFlags, state.requireFlags),
           laxPlacement: or(opts.laxPlacement, state.laxPlacement),
           stopAt: or(opts.stopAt, state.stopAt)

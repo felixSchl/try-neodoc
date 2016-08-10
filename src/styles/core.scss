@@ -5,6 +5,13 @@
   @import 'node_modules/codemirror/theme/tomorrow-night-eighties';
   @import 'node_modules/codemirror/theme/dracula';
 
+  @mixin placeholder {
+    &.placeholder { @content; }
+    &:-moz-placeholder { @content; }
+    &::-moz-placeholder { @content; }
+    &::-webkit-input-placeholder { @content; }
+  }
+
   // Some best-practice CSS that's useful for most apps
   // Just remove them if they're not what you want
   html {
@@ -16,6 +23,7 @@
     margin: 0;
     padding: 0;
     height: 100%;
+    background: #181c25;
   }
 
   *,
@@ -36,18 +44,19 @@
   }
 
   #container {
+    font-family: monaco, Consolas, Lucida Console, monospace;
     padding: 1em;
     width: 100%;
-    padding-left: 150px;
-    padding-right: 50px;
     position: relative;
-    border-spacing: 0;
-    margin: 0 auto;
-
 
     .title {
+      color: #fff;
       padding-bottom: 0;
       margin-bottom: .3em;
+    }
+
+    #topsection {
+      position: relative;
     }
 
     .subtitle {
@@ -55,6 +64,23 @@
       margin-top: 0;
       font-weight: normal;
       font-style: italic;
+      color: #97b0c1;
+    }
+
+    .github {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      ul {
+        li {
+          iframe {
+            margin-right: 8px;
+            height: 100%;
+            width: 100%;
+          }
+          list-style-type: none;
+        }
+      }
     }
 
     h3 {
@@ -62,10 +88,16 @@
     }
   }
 
+  #inner-container {
+    margin: 0 auto;
+    max-width: 1000px;
+  }
+
   #playground {
     position: relative;
-    max-width: 1200px;
     display: table;
+    box-shadow: 0 0 20px 20px rgba(0, 0, 0, 0.07);
+    border-top: 2px inset orange;
 
     #main {
       padding: 0;
@@ -76,18 +108,58 @@
     }
 
     #right {
+      font-family: monaco, Consolas, Lucida Console, monospace;
+      box-shadow: -10px 0px 10px 10px black;
+      z-index: 300;
       padding: 0;
-      padding-left: 0.5em;
       min-width: 300px;
       max-width: 500px;
       display: table-cell;
       vertical-align: top;
       box-shadow: -10px 0 15px -12px #222;
       position: relative;
+      background: #223040;
+      color: #d9dbe0;
+      /* border-left: 2px groove #20436b; */
+
+      h3 {
+        padding-left: 10px;
+        text-transform: capitalize;
+        text-shadow: 0 0 3px #191919;
+        color: #989898;
+      }
+    }
+
+    #rubber {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      height: 30px;
+      background: #0d151f;
+      padding: 5px;
+
+      ul {
+        display: table;
+        margin: 0;
+        padding: 0;
+
+        li {
+          display: table-cell;
+          list-style-type: none;
+          border: 0;
+        }
+
+        iframe {
+          width: 100%;
+          border: 0;
+          margin: 0 auto;
+        }
+      }
     }
 
     #argv {
-      height: 2em;
+      height: 100%;
       background: white;
 
       #output {
@@ -124,11 +196,20 @@
     }
 
     #options {
+
       ul {
-        padding: 5px;
-        margin: 0px;
+        padding: 0;
+        margin: 0;
+
         li {
+          padding: 2px;
+          padding-left: 8px;
+          padding-right: 5px;
           list-style-type: none;
+
+          &.even {
+            background: #142b46;
+          }
 
           &.complex {
             padding-top: 8px;
@@ -138,6 +219,25 @@
           &.important {
           }
         }
+      }
+
+      input[type=text] {
+        background: #3d445f;
+        border: 2px groove #183456;
+        font-size: 0.75em;
+
+        @include placeholder {
+          color: gray;
+        }
+      }
+
+      label {
+        font-size: 0.8em;
+      }
+
+      .new-feature {
+        padding-left: 3px;
+        color: orange;
       }
     }
 
@@ -154,32 +254,20 @@
       }
     }
 
-    .CodeMirror {
-      height: 640px;
-      border-left: none;
-      border-top: none;
-
-      .CodeMirror-cursor {
-        width: auto;
-        border: 0;
-        background: transparent;
-        background: rgba(100, 100, 255, .8);
+    #editor {
+      .CodeMirror {
+        height: auto;
+        height: 640px;
+        border-left: none;
+        border-top: none;
       }
     }
 
-    .command-line {
-      border: 1px solid #ccc;
-      padding-left: 5px;
-      span {
-        font-style: italic;
-      }
-      input {
-        margin-left: 0.5em;
-        border: none;
-        &:focus {
-          outline: none;
-        }
-      }
+    .CodeMirror-cursor {
+      width: auto;
+      border: 0;
+      background: transparent;
+      background: rgba(100, 100, 255, .8);
     }
 
     #error {
@@ -216,6 +304,42 @@
     .fade-leave.fade-leave-active {
       opacity: 0.01;
       transition: opacity 300ms cubic-bezier(0.190, 1.000, 0.220, 1.000);
+    }
+
+    #command-line {
+      width: 100%;
+      background: #131319 !important;
+      overflow: hidden;
+      padding: 4px;
+
+      .CodeMirror {
+        height: auto !important;
+      }
+
+      ul {
+        margin: 0;
+        padding: 0;
+        display: table;
+        li {
+          list-style-type: none;
+          display: table-cell;
+        }
+      }
+
+      .predefined {
+        vertical-align: middle;
+        color: yellow;
+        background: none;
+      }
+
+      .cm-s-dracula.CodeMirror { /* theme overrides */
+        background: #131319 !important;
+      }
+
+
+      #argv {
+        width: 100%;
+      }
     }
   }
 

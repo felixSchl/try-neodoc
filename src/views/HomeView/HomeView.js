@@ -11,19 +11,53 @@ export class HomeView extends React.Component {
 
     return (
       <div id='container'>
-        <a href='https://github.com/felixschl/neodoc'>
-          <img style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            border: 0 }}
-            src={forkmeImg}
-            alt='Fork me on GitHub'
-            data-canonical-src={forkmeCanonical} />
-        </a>
-        <h1 className='title'>&lt;neodoc&gt;</h1>
-        <h5 className='subtitle'>Beautiful, handcrafted commandlines <sub>v0.10.0</sub></h5>
-        <Playground />
+        <div id='inner-container'>
+          <a href='https://github.com/felixschl/neodoc'>
+            <img style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              border: 0 }}
+              src={forkmeImg}
+              alt='Fork me on GitHub'
+              data-canonical-src={forkmeCanonical} />
+          </a>
+          <div id='topsection'>
+            <h1 className='title'>&lt;neodoc&gt;</h1>
+            <h5 className='subtitle'>
+              Beautiful, handcrafted commandlines <sub>v0.10.0</sub>
+            </h5>
+            <div className='github'>
+              <ul>
+                <li>
+                  <a className='github-button'
+                    href='https://github.com/felixschl/neodoc'
+                    data-icon='octicon-star'
+                    data-count-href='/felixschl/neodoc/stargazers'
+                    data-count-api='/repos/felixschl/neodoc#stargazers_count'
+                    data-count-aria-label='# stargazers on GitHub'
+                    aria-label='Star felixschl/neodoc on GitHub'
+                    >Star</a>
+                  <a className='github-button'
+                    href='https://github.com/felixschl/neodoc/issues'
+                    data-icon='octicon-issue-opened'
+                    data-count-api='/repos/felixschl/neodoc#open_issues_count'
+                    data-count-aria-label='# issues on GitHub'
+                    aria-label='Issue felixschl/neodoc on GitHub'
+                    >Issue</a>
+                  <a className='github-button'
+                    href='https://github.com/felixschl'
+                    data-count-href='/felixschl/followers'
+                    data-count-api='/users/felixschl#followers'
+                    data-count-aria-label='# followers on GitHub'
+                    aria-label='Follow @felixschl on GitHub'
+                    >Follow @felixschl</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <Playground />
+        </div>
       </div>
     );
   }

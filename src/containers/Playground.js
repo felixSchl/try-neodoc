@@ -11,15 +11,34 @@ require('codemirror/addon/display/rulers');
 require('codemirror/keymap/vim');
 require('codemirror/keymap/emacs');
 
+class Asterix extends React.Component {
+  render () {
+    return <span className='asterix'>*</span>;
+  }
+}
+
+class NewFeature extends React.Component {
+  props: Props;
+  static propTypes = {
+    version: PropTypes.string.isRequired
+  }
+
+  render () {
+    return <sub className='new-feature'>v{this.props.version}</sub>;
+  }
+}
+
 export class Playground extends React.Component {
   props: Props;
 
   static propTypes = {
     source: PropTypes.string.isRequired,
     argv: PropTypes.string.isRequired,
+    env: PropTypes.string.isRequired,
     stopAt: PropTypes.array.isRequired,
     setSource: PropTypes.func.isRequired,
     setArgv: PropTypes.func.isRequired,
+    setEnv: PropTypes.func.isRequired,
     setOptionsFirst: PropTypes.func.isRequired,
     setSmartOptions: PropTypes.func.isRequired,
     setRequireFlags: PropTypes.func.isRequired,
@@ -63,13 +82,12 @@ export class Playground extends React.Component {
     return (
       <div id='playground'>
         <div id='main'>
-          <div>
+          <div id='editor'>
             <Codemirror
               value={this.props.source}
               onChange={this.props.setSource}
               options={{
                 readOnly: false,
-                // theme: 'tomorrow-night-eighties',
                 theme: 'dracula',
                 extraKeys: {
                   'Tab': (cm) => {
@@ -87,7 +105,7 @@ export class Playground extends React.Component {
             />
           </div>
 
-          <div id='argv'>
+          <div>
             <div>
               <ReactCSSTransitionGroup
                 transitionName='fade'
@@ -107,11 +125,39 @@ export class Playground extends React.Component {
                 }
               </ReactCSSTransitionGroup>
             </div>
-            <div className='command-line'>
-              <span>$ prog</span>
-              <input type='text'
-                value={this.props.argv}
-                onChange={this.props.setArgv} />
+            <div id='command-line'>
+              <ul>
+                <li>
+                  <div className='predefined'>$</div>
+                </li>
+                <li>
+                  <Codemirror
+                    id='env'
+                    value={this.props.env}
+                    onChange={this.props.setEnv}
+                    options={{
+                      readOnly: false,
+                      theme: 'dracula',
+                      keyMap: this.props.keybindings
+                    }}
+                  />
+                </li>
+                <li>
+                  <div className='predefined'>prog</div>
+                </li>
+                <li>
+                  <Codemirror
+                    id='argv'
+                    value={this.props.argv}
+                    onChange={this.props.setArgv}
+                    options={{
+                      readOnly: false,
+                      theme: 'dracula',
+                      keyMap: this.props.keybindings
+                    }}
+                  />
+                </li>
+              </ul>
             </div>
           </div>
         </div>
@@ -120,68 +166,73 @@ export class Playground extends React.Component {
           <div id='options'>
             <h3>options</h3>
             <ul>
-              <li className='option important'>
+              <li className='option important even'>
                 <input id='options-first'
                   type='checkbox'
                   checked={this.props.optionsFirst}
                   defaultChecked={this.props.optionsFirst}
                   onChange={this.props.setOptionsFirst} />
                 <label htmlFor='options-first' className='right'>
-                  Enable options-first
+                  options-first
                 </label>
               </li>
 
-              <li className='option important'>
+              <li className='option important odd'>
                 <input id='smart-options'
                   type='checkbox'
                   checked={this.props.smartOptions}
                   defaultChecked={this.props.smartOptions}
                   onChange={this.props.setSmartOptions} />
                 <label htmlFor='smart-options' className='right'>
-                  Enable smart-options
+                  smart-options<Asterix />
                 </label>
               </li>
 
-              <li className='option important'>
+              <li className='option important even'>
                 <input id='require-flags'
                   type='checkbox'
                   checked={this.props.requireFlags}
                   defaultChecked={this.props.requireFlags}
                   onChange={this.props.setRequireFlags} />
                 <label htmlFor='require-flags' className='right'>
-                  Require flags be matched explicitly
+                  require-flags
+                  <NewFeature version='0.8.0' />
                 </label>
               </li>
 
-              <li className='option important'>
+              <li className='option important odd'>
                 <input id='lax-placement'
                   type='checkbox'
                   checked={this.props.laxPlacement}
                   defaultChecked={this.props.laxPlacement}
                   onChange={this.props.setLaxPlacement} />
                 <label htmlFor='lax-placement' className='right'>
-                  Positions do not matter (lax placement)
-                  <sub>&mdash; new in v0.9.0</sub>
+                  lax-placement
+                  <NewFeature version='0.9.0' />
                 </label>
               </li>
 
-              <li className='option complex'>
-                <label htmlFor='stop-at' className='above'>
-                  Stop at these options:
+              <li className='option complex even'>
+                <label htmlFor='stop-at' className='left'>
+                  stop-at:
                 </label>
                 <input id='stop-at'
                   type='text'
                   value={this.props.stopAt && this.props.stopAt.join(' ')}
+                  placeholder='-a --foo'
                   onChange={this.props.setStopAt} />
-                <label htmlFor='stop-at' className='below explanation'>
-                  space separated, e.g.: "-n -f"
-                </label>
+              </li>
+
+              <li>
+                <sub className='subtitle'>
+                  <Asterix />this setting requires a re-parse.
+                </sub>
               </li>
             </ul>
           </div>
 
           <div id='editor-settings'>
-            <h4>editor settings</h4>
+            <h3>editor settings</h3>
             <ul className='options'>
               <li className='option'>
                 <label htmlFor='keybindings' className='left'>key bindings:</label>
@@ -198,7 +249,7 @@ export class Playground extends React.Component {
           </div>
 
           <div id='timing'>
-            <h4>timing</h4>
+            <h3>timing</h3>
             <ul>
               <li>parsed spec in <span className='ms'>{
                 this.props.parseTime
@@ -219,7 +270,7 @@ export class Playground extends React.Component {
           </div>
 
           <div id='output'>
-            <h4>output</h4>
+            <h3>output</h3>
             <div className='success'>
               {
                 (() => {
@@ -243,6 +294,10 @@ export class Playground extends React.Component {
               }
             </div>
           </div>
+
+          <div id='rubber'>
+          </div>
+
         </div>
         <div className='clear-fix'>
         </div>
@@ -265,18 +320,20 @@ const mapStateToProps = (state) => ({
   spec: state.neodoc.spec,
   parseTime: state.neodoc.parseTime,
   runTime: state.neodoc.runTime,
-  keybindings: state.editor.keybindings
+  keybindings: state.editor.keybindings,
+  env: null /* TODO */
 });
 
 const mapDispatchToProps = (dispatch) => ({
   setSource: (s) => dispatch(setSource(s)),
-  setArgv: (event) => dispatch(setArgv(event.target.value)),
+  setArgv: (s) => dispatch(setArgv(s)),
   setOptionsFirst: (event) => dispatch(setOptionsFirst(event.target.checked)),
   setSmartOptions: (event) => dispatch(setSmartOptions(event.target.checked)),
   setRequireFlags: (event) => dispatch(setRequireFlags(event.target.checked)),
   setLaxPlacement: (event) => dispatch(setLaxPlacement(event.target.checked)),
   setKeybindings: (event) => dispatch(setKeybindings(event.target.value)),
-  setStopAt: (event) => dispatch(setStopAt(event.target.value.split(' ')))
+  setStopAt: (event) => dispatch(setStopAt(event.target.value.split(' '))),
+  setEnv: () => { /* TODO */ }
 });
 
 export default connect(
