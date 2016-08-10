@@ -97,7 +97,8 @@ function run (state, opts) {
 
   if (source && (
       !state.source || source !== state.source ||
-        (opts.smartOptions !== state.smartOptions))
+        (typeof opts.smartOptions !== 'undefined' &&
+         opts.smartOptions !== state.smartOptions))
   ) {
     const now = Date.now();
     try {
