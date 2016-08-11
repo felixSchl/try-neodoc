@@ -323,6 +323,9 @@
         li {
           list-style-type: none;
           display: table-cell;
+          &.argv {
+            width: 100%;
+          }
         }
       }
 

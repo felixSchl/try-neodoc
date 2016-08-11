@@ -145,7 +145,7 @@ export class Playground extends React.Component {
                 <li>
                   <div className='predefined'>prog</div>
                 </li>
-                <li>
+                <li className='argv'>
                   <Codemirror
                     id='argv'
                     value={this.props.argv}
