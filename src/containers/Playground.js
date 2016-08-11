@@ -8,6 +8,7 @@ import { setKeybindings } from 'redux/modules/editor';
 import Codemirror from 'react-codemirror';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 require('codemirror/addon/display/rulers');
+require('codemirror/addon/display/placeholder');
 require('codemirror/keymap/vim');
 require('codemirror/keymap/emacs');
 
@@ -128,7 +129,7 @@ export class Playground extends React.Component {
             <div id='command-line'>
               <ul>
                 <li>
-                  <div className='predefined'>$</div>
+                  <div className='predefined'>[neodoc:~]$</div>
                 </li>
                 <li>
                   <Codemirror
@@ -138,7 +139,8 @@ export class Playground extends React.Component {
                     options={{
                       readOnly: false,
                       theme: 'dracula',
-                      keyMap: this.props.keybindings
+                      keyMap: this.props.keybindings,
+                      placeholder: 'ENV_VAR=value'
                     }}
                   />
                 </li>
@@ -153,7 +155,8 @@ export class Playground extends React.Component {
                     options={{
                       readOnly: false,
                       theme: 'dracula',
-                      keyMap: this.props.keybindings
+                      keyMap: this.props.keybindings,
+                      placeholder: '--foo=bar'
                     }}
                   />
                 </li>
@@ -251,22 +254,14 @@ export class Playground extends React.Component {
           <div id='timing'>
             <h3>timing</h3>
             <ul>
-              <li>parsed spec in <span className='ms'>{
+              <li className='parse-spec-time'>parsed spec in <span className='ms'>{
                 this.props.parseTime
               }ms</span></li>
 
-              <li>parsed argv in <span className='ms argv'>{
+              <li className='parse-argv-time'>parsed argv in <span className='ms argv'>{
                 this.props.runTime
               }ms</span></li>
             </ul>
-            <div className='subtitle'>
-              <p>
-                <b>Important Note:</b> Since the neodoc parse output is just
-                JSON, it can cached or even shipped with the cli, reducing the
-                total time to the latter of these two numbers (rather than the
-                sum).
-              </p>
-            </div>
           </div>
 
           <div id='output'>

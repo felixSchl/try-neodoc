@@ -43,6 +43,10 @@
     }
   }
 
+  .CodeMirror-placeholder {
+    color: #484848 !important;
+  }
+
   #container {
     font-family: monaco, Consolas, Lucida Console, monospace;
     padding: 1em;
@@ -246,6 +250,10 @@
         font-style: italic;
       }
 
+      .parse-spec-time {
+        color: gray;
+      }
+
       span.ms.argv {
         font-weight: bold;
       }
@@ -329,7 +337,13 @@
         }
       }
 
+      #env {
+        min-width: 100px;
+      }
+
       .predefined {
+        width: 100%;
+        font-size: 0.85em;
         vertical-align: middle;
         color: yellow;
         background: none;
