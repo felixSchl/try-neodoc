@@ -177,6 +177,9 @@ function run (state, opts) {
 
   function toEnv (s) {
     let env = {};
+    if (s.trim().length === 0) {
+      return env;
+    }
     for (let x of s.split(' ')) {
       const xs = x.split('=');
       if (xs.length === 1) {
@@ -260,8 +263,8 @@ Options:
   spec: null,
   userError: null,
   specError: null,
-  parseTime: null,
-  runTime: null,
+  parseTime: 'N/A',
+  runTime: 'N/A',
   optionsFirst: false,
   smartOptions: true,
   requireFlags: false,
