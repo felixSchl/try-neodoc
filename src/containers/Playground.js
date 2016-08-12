@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { setSmartOptions, setSource, setArgv, setOptionsFirst, setStopAt,
-         setRequireFlags, setLaxPlacement
+         setRequireFlags, setLaxPlacement, setEnv
        } from 'redux/modules/neodoc';
 import { setKeybindings } from 'redux/modules/editor';
 import Codemirror from 'react-codemirror';
@@ -104,10 +104,7 @@ export class Playground extends React.Component {
                 keyMap: this.props.keybindings
               }}
             />
-          </div>
-
-          <div>
-            <div>
+            <div id='error'>
               <ReactCSSTransitionGroup
                 transitionName='fade'
                 transitionEnterTimeout={200}
@@ -115,7 +112,7 @@ export class Playground extends React.Component {
               >
                 {
                   (this.props.userError || this.props.specError)
-                    ? <div id='error' style={{whiteSpace: 'pre'}} key='neodoc-error'>
+                    ? <div style={{whiteSpace: 'pre'}} key='neodoc-error'>
                       <pre>
                         {
                           (this.props.userError || this.props.specError).message
@@ -126,42 +123,43 @@ export class Playground extends React.Component {
                 }
               </ReactCSSTransitionGroup>
             </div>
-            <div id='command-line'>
-              <ul>
-                <li>
-                  <div className='predefined'>[neodoc:~]$</div>
-                </li>
-                <li>
-                  <Codemirror
-                    id='env'
-                    value={this.props.env}
-                    onChange={this.props.setEnv}
-                    options={{
-                      readOnly: false,
-                      theme: 'dracula',
-                      keyMap: this.props.keybindings,
-                      placeholder: 'ENV_VAR=value'
-                    }}
-                  />
-                </li>
-                <li>
-                  <div className='predefined'>prog</div>
-                </li>
-                <li className='argv'>
-                  <Codemirror
-                    id='argv'
-                    value={this.props.argv}
-                    onChange={this.props.setArgv}
-                    options={{
-                      readOnly: false,
-                      theme: 'dracula',
-                      keyMap: this.props.keybindings,
-                      placeholder: '--foo=bar'
-                    }}
-                  />
-                </li>
-              </ul>
-            </div>
+          </div>
+
+          <div id='command-line'>
+            <ul>
+              <li>
+                <div className='predefined'>[neodoc:~]$</div>
+              </li>
+              <li>
+                <Codemirror
+                  id='env'
+                  value={this.props.env}
+                  onChange={this.props.setEnv}
+                  options={{
+                    readOnly: false,
+                    theme: 'dracula',
+                    keyMap: this.props.keybindings,
+                    placeholder: 'ENV_VAR=value'
+                  }}
+                />
+              </li>
+              <li>
+                <div className='predefined'>prog</div>
+              </li>
+              <li className='argv'>
+                <Codemirror
+                  id='argv'
+                  value={this.props.argv}
+                  onChange={this.props.setArgv}
+                  options={{
+                    readOnly: false,
+                    theme: 'dracula',
+                    keyMap: this.props.keybindings,
+                    placeholder: '--foo=bar'
+                  }}
+                />
+              </li>
+            </ul>
           </div>
         </div>
 
@@ -277,9 +275,9 @@ export class Playground extends React.Component {
                         <tbody>
                           {_.map(keys, (k, i) => (
                             <tr key={k} className={i % 2 === 0 ? 'even' : 'odd'}>
-                              <td>{k}</td>
-                              <td>&rarr;</td>
-                              <td>{JSON.stringify(this.props.output[k])}</td>
+                              <td className='key'>{k}</td>
+                              <td className='arrow'>&rarr;</td>
+                              <td className='value'>{JSON.stringify(this.props.output[k])}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -316,7 +314,7 @@ const mapStateToProps = (state) => ({
   parseTime: state.neodoc.parseTime,
   runTime: state.neodoc.runTime,
   keybindings: state.editor.keybindings,
-  env: null /* TODO */
+  env: state.neodoc.env
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -328,7 +326,7 @@ const mapDispatchToProps = (dispatch) => ({
   setLaxPlacement: (event) => dispatch(setLaxPlacement(event.target.checked)),
   setKeybindings: (event) => dispatch(setKeybindings(event.target.value)),
   setStopAt: (event) => dispatch(setStopAt(event.target.value.split(' '))),
-  setEnv: () => { /* TODO */ }
+  setEnv: (s) => dispatch(setEnv(s))
 });
 
 export default connect(

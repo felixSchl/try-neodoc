@@ -122,6 +122,7 @@
       vertical-align: top;
       box-shadow: -10px 0 15px -12px #222;
       position: relative;
+      padding-bottom: 10px;
       background: #223040;
       color: #d9dbe0;
       /* border-left: 2px groove #20436b; */
@@ -162,32 +163,38 @@
       }
     }
 
+    #output {
+      margin: 24px 0;
+
+      table {
+        width: 100%;
+        tr.odd {
+          background: rgba(0.5, 0.5, 0.5, 0.1);
+        }
+
+        td {
+          padding: 0 16px;
+        }
+      }
+
+      .success {
+        background: rgba(0, 156, 255, 0.4);
+        padding: 10px;
+        margin: 5px;
+        border-radius: 10px;
+        border: 1px solid #4373b1;
+        border-top-color: #82a1ca;
+      }
+
+      .empty {
+        color: gray;
+        font-style: italic;
+      }
+    }
+
     #argv {
       height: 100%;
       background: white;
-
-      #output {
-        margin: 24px 0;
-
-        table {
-          tr.odd {
-            background: rgba(0.5, 0.5, 0.5, 0.1);
-          }
-
-          td {
-            padding: 0 16px;
-          }
-        }
-
-        .success {
-          background-color: rgba(0, 150, 100, 0.1);
-        }
-
-        .empty {
-          color: gray;
-          font-style: italic;
-        }
-      }
 
       input {
         width: 80%;
@@ -263,6 +270,7 @@
     }
 
     #editor {
+      position: relative;
       .CodeMirror {
         height: auto;
         height: 640px;

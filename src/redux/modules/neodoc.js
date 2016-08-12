@@ -5,6 +5,7 @@ import * as neodoc from 'neodoc';
 
 export const NEODOC_SET_SOURCE = 'NEODOC_SET_SOURCE';
 export const NEODOC_SET_ARGV = 'NEODOC_SET_ARGV';
+export const NEODOC_SET_ENV = 'NEODOC_SET_ENV';
 export const NEODOC_SET_OPTS_FIRST = 'NEODOC_SET_OPTS_FIRST';
 export const NEODOC_SET_SMART_OPTS = 'NEODOC_SET_SMART_OPTS';
 export const NEODOC_SET_REQUIRE_FLAGS = 'NEODOC_SET_REQUIRE_FLAGS';
@@ -34,6 +35,13 @@ export function setSource (value: string): Action {
 export function setArgv (value: string): Action {
   return {
     type: NEODOC_SET_ARGV,
+    payload: value
+  };
+}
+
+export function setEnv (value: string): Action {
+  return {
+    type: NEODOC_SET_ENV,
     payload: value
   };
 }
@@ -76,6 +84,7 @@ export function setStopAt (value: boolean): Action {
 export const actions = {
   setSource,
   setArgv,
+  setEnv,
   setOptionsFirst,
   setSmartOptions,
   setRequireFlags,
@@ -95,12 +104,21 @@ function run (state, opts) {
 
   let source = or(opts.source, state.source);
 
-  if (source && (
+  let env;
+  try {
+    env = toEnv(or(opts.env, state.env));
+  } catch (e) {
+    console.log('user error', e);
+    userError = e;
+  }
+
+  if (!userError && source && (
       !state.source || source !== state.source ||
         (typeof opts.smartOptions !== 'undefined' &&
          opts.smartOptions !== state.smartOptions))
   ) {
     const now = Date.now();
+
     try {
       spec = neodoc.parse(source, {
         smartOptions: or(opts.smartOptions, state.smartOptions)
@@ -123,6 +141,7 @@ function run (state, opts) {
           dontExit: true,
 
           argv: stringArgv(or(opts.argv, state.argv)),
+          env: env,
           optionsFirst: or(opts.optionsFirst, state.optionsFirst),
           requireFlags: or(opts.requireFlags, state.requireFlags),
           laxPlacement: or(opts.laxPlacement, state.laxPlacement),
@@ -147,6 +166,7 @@ function run (state, opts) {
     userError: userError,
 
     argv: or(opts.argv, state.argv),
+    env: or(opts.env, state.env),
     optionsFirst: or(opts.optionsFirst, state.optionsFirst),
     smartOptions: or(opts.smartOptions, state.smartOptions),
     laxPlacement: or(opts.laxPlacement, state.laxPlacement),
@@ -155,6 +175,21 @@ function run (state, opts) {
     parseTime: parseTime,
     runTime: runTime
   };
+
+  function toEnv (s) {
+    let env = {};
+    for (let x of s.split(' ')) {
+      const xs = x.split('=');
+      if (xs.length === 1) {
+        throw new Error('Unknown command \'FOO\'');
+      }
+      const k = xs[0];
+      xs.shift();
+      const v = xs.join('=');
+      env[k] = v;
+    }
+    return env;
+  }
 
   function or (a, b) {
     if (a === undefined || a === null) {
@@ -173,6 +208,10 @@ const ACTION_HANDLERS = {
   [NEODOC_SET_ARGV]:
     (state: State, action: {payload: string}): string => {
       return run(state, { argv: action.payload });
+    },
+  [NEODOC_SET_ENV]:
+    (state: State, action: {payload: string}): string => {
+      return run(state, { env: action.payload });
     },
   [NEODOC_SET_OPTS_FIRST]:
     (state: State, action: {payload: boolean}): boolean => {
@@ -217,6 +256,7 @@ Options:
   --drifting    Drifting mine.
 `,
   argv: '',
+  env: '',
   output: null,
   spec: null,
   userError: null,
