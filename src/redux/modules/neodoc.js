@@ -108,8 +108,7 @@ function run (state, opts) {
   try {
     env = toEnv(or(opts.env, state.env));
   } catch (e) {
-    console.log('user error', e);
-    userError = e;
+    userError = `Bad environment variables:\n${e.message}`;
   }
 
   if (!userError && source && (
@@ -124,7 +123,7 @@ function run (state, opts) {
         smartOptions: or(opts.smartOptions, state.smartOptions)
       });
     } catch (e) {
-      specError = e;
+      specError = e.message;
     }
     parseTime = Date.now() - now;
   } else {
@@ -149,7 +148,7 @@ function run (state, opts) {
         }
       );
     } catch (e) {
-      userError = e;
+      userError = e.message;
     }
     runTime = Date.now() - now;
   } else {
@@ -181,7 +180,7 @@ function run (state, opts) {
     for (let x of s.split(' ')) {
       const xs = x.split('=');
       if (xs.length === 1) {
-        throw new Error('Unknown command \'FOO\'');
+        throw new Error(`Missing value for '${xs[0]}'`);
       }
       const k = xs[0];
       xs.shift();

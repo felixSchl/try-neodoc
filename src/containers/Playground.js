@@ -52,8 +52,8 @@ export class Playground extends React.Component {
     parseTime: PropTypes.number,
     runTime: PropTypes.number,
     spec: PropTypes.object,
-    userError: PropTypes.object,
-    specError: PropTypes.object,
+    userError: PropTypes.string,
+    specError: PropTypes.string,
     output: PropTypes.object,
     setKeybindings: PropTypes.func,
     keybindings: PropTypes.string
@@ -113,11 +113,7 @@ export class Playground extends React.Component {
                 {
                   (this.props.userError || this.props.specError)
                     ? <div style={{whiteSpace: 'pre'}} key='neodoc-error'>
-                      <pre>
-                        {
-                          (this.props.userError || this.props.specError).message
-                        }
-                      </pre>
+                      <pre>{this.props.userError || this.props.specError}</pre>
                     </div>
                     : null
                 }
