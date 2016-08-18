@@ -104,7 +104,7 @@ export class Playground extends React.Component {
                 keyMap: this.props.keybindings
               }}
             />
-            <div id='error'>
+            <div>
               <ReactCSSTransitionGroup
                 transitionName='fade'
                 transitionEnterTimeout={200}
@@ -112,7 +112,7 @@ export class Playground extends React.Component {
               >
                 {
                   (this.props.userError || this.props.specError)
-                    ? <div style={{whiteSpace: 'pre'}} key='neodoc-error'>
+                    ? <div id='error' style={{whiteSpace: 'pre'}} key='neodoc-error'>
                       <pre>{this.props.userError || this.props.specError}</pre>
                     </div>
                     : null
