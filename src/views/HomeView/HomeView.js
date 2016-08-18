@@ -25,7 +25,7 @@ export class HomeView extends React.Component {
           <div id='topsection'>
             <h1 className='title'>&lt;neodoc&gt;</h1>
             <h5 className='subtitle'>
-              Beautiful, handcrafted commandlines <sub>v0.10.0</sub>
+              Beautiful, handcrafted commandlines <sub>v0.10.1</sub>
             </h5>
             <div className='github'>
               <ul>
