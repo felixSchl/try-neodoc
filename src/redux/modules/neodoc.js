@@ -176,6 +176,7 @@ function run (state, opts) {
   };
 
   function toEnv (s) {
+    if (s.trim().length === 0) { return {}; }
     let env = {};
     for (let x of s.split(' ')) {
       const xs = x.split('=');
