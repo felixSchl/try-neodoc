@@ -111,17 +111,11 @@ function run (state, opts) {
     userError = `Bad environment variables:\n${e.message}`;
   }
 
-  if (!userError && source && (
-      !state.source || source !== state.source ||
-        (typeof opts.smartOptions !== 'undefined' &&
-         opts.smartOptions !== state.smartOptions))
-  ) {
+  if (!userError && source && (!state.source || source !== state.source)) {
     const now = Date.now();
 
     try {
-      spec = neodoc.parse(source, {
-        smartOptions: or(opts.smartOptions, state.smartOptions)
-      });
+      spec = neodoc.parse(source);
     } catch (e) {
       specError = e.message;
     }
@@ -144,10 +138,13 @@ function run (state, opts) {
           optionsFirst: or(opts.optionsFirst, state.optionsFirst),
           requireFlags: or(opts.requireFlags, state.requireFlags),
           laxPlacement: or(opts.laxPlacement, state.laxPlacement),
-          stopAt: or(opts.stopAt, state.stopAt)
+          smartOptions: or(opts.smartOptions, state.smartOptions),
+          stopAt: or(opts.stopAt, state.stopAt),
+          version: '0.5'
         }
       );
     } catch (e) {
+      console.log(e);
       userError = e.message;
     }
     runTime = Date.now() - now;

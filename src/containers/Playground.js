@@ -112,9 +112,17 @@ export class Playground extends React.Component {
               >
                 {
                   (this.props.userError || this.props.specError)
-                    ? <div id='error' style={{whiteSpace: 'pre'}} key='neodoc-error'>
+                    ? (
+                    <div id='error' className='popup-box' style={{whiteSpace: 'pre'}} key='neodoc-error'>
                       <pre>{this.props.userError || this.props.specError}</pre>
                     </div>
+                    )
+                : (typeof this.props.output === 'string')
+                    ? (
+                    <div id='txt-output' className='popup-box' style={{whiteSpace: 'pre'}} key='neodoc-txt-output'>
+                      <pre>{this.props.output}</pre>
+                    </div>
+                    )
                     : null
                 }
               </ReactCSSTransitionGroup>
@@ -263,22 +271,24 @@ export class Playground extends React.Component {
             <div className='success'>
               {
                 (() => {
-                  const keys = this.props.output && _.keys(this.props.output);
-                  return keys
-                    ? keys.length === 0
-                      ? <span className='empty'>empty</span>
-                      : <table>
-                        <tbody>
-                          {_.map(keys, (k, i) => (
-                            <tr key={k} className={i % 2 === 0 ? 'even' : 'odd'}>
-                              <td className='key'>{k}</td>
-                              <td className='arrow'>&rarr;</td>
-                              <td className='value'>{JSON.stringify(this.props.output[k])}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    : 'N/A';
+                  if (typeof this.props.output !== 'string') {
+                    const keys = this.props.output && _.keys(this.props.output);
+                    return keys
+                      ? keys.length === 0
+                        ? <span className='empty'>empty</span>
+                        : <table>
+                          <tbody>
+                            {_.map(keys, (k, i) => (
+                              <tr key={k} className={i % 2 === 0 ? 'even' : 'odd'}>
+                                <td className='key'>{k}</td>
+                                <td className='arrow'>&rarr;</td>
+                                <td className='value'>{JSON.stringify(this.props.output[k])}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      : 'N/A';
+                  }
                 })()
               }
             </div>
