@@ -166,6 +166,7 @@ function run (state, opts) {
     optionsFirst: or(opts.optionsFirst, state.optionsFirst),
     smartOptions: or(opts.smartOptions, state.smartOptions),
     laxPlacement: or(opts.laxPlacement, state.laxPlacement),
+    requireFlags: or(opts.requireFlags, state.requireFlags),
     stopAt: or(opts.stopAt, state.stopAt),
 
     parseTime: parseTime,
