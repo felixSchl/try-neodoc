@@ -112,18 +112,20 @@ export class Playground extends React.Component {
               >
                 {
                   (this.props.userError || this.props.specError)
-                    ? (
-                    <div id='error' className='popup-box' style={{whiteSpace: 'pre'}} key='neodoc-error'>
+                    ? <div id='error'
+                        className='popup-box'
+                        style={{whiteSpace: 'pre'}}
+                        key='neodoc-error'>
                       <pre>{this.props.userError || this.props.specError}</pre>
                     </div>
-                    )
-                : (typeof this.props.output === 'string')
-                    ? (
-                    <div id='txt-output' className='popup-box' style={{whiteSpace: 'pre'}} key='neodoc-txt-output'>
-                      <pre>{this.props.output}</pre>
-                    </div>
-                    )
-                    : null
+                    : (typeof this.props.output === 'string')
+                      ? <div id='txt-output'
+                          className='popup-box'
+                          style={{whitespace: 'pre'}}
+                          key='neodoc-txt-output'>
+                        <pre>{this.props.output}</pre>
+                      </div>
+                      : null
                 }
               </ReactCSSTransitionGroup>
             </div>
