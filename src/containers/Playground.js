@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { setSmartOptions, setSource, setArgv, setOptionsFirst, setStopAt,
-         setRequireFlags, setLaxPlacement, setEnv
+         setRequireFlags, setLaxPlacement, setRepeatableOptions, setEnv
        } from 'redux/modules/neodoc';
 import { setKeybindings } from 'redux/modules/editor';
 import Codemirror from 'react-codemirror';
@@ -44,11 +44,13 @@ export class Playground extends React.Component {
     setSmartOptions: PropTypes.func.isRequired,
     setRequireFlags: PropTypes.func.isRequired,
     setLaxPlacement: PropTypes.func.isRequired,
+    setRepeatableOptions: PropTypes.func.isRequired,
     setStopAt: PropTypes.func.isRequired,
     optionsFirst: PropTypes.bool,
     smartOptions: PropTypes.bool,
     requireFlags: PropTypes.bool,
     laxPlacement: PropTypes.bool,
+    repeatableOptions: PropTypes.bool,
     parseTime: PropTypes.number,
     runTime: PropTypes.number,
     spec: PropTypes.object,
@@ -219,7 +221,19 @@ export class Playground extends React.Component {
                 </label>
               </li>
 
-              <li className='option complex even'>
+              <li className='option important even'>
+                <input id='repeatable-options'
+                  type='checkbox'
+                  checked={this.props.repeatableOptions}
+                  defaultChecked={this.props.repeatableOptions}
+                  onChange={this.props.setRepeatableOptions} />
+                <label htmlFor='repeatable-options' className='right'>
+                  repeatable-options
+                  <NewFeature version='1.0.1' />
+                </label>
+              </li>
+
+              <li className='option complex odd'>
                 <label htmlFor='stop-at' className='left'>
                   stop-at:
                 </label>
@@ -317,6 +331,7 @@ const mapStateToProps = (state) => ({
   smartOptions: state.neodoc.smartOptions,
   requireFlags: state.neodoc.requireFlags,
   laxPlacement: state.neodoc.laxPlacement,
+  repeatableOptions: state.neodoc.repeatableOptions,
   stopAt: state.neodoc.stopAt,
   spec: state.neodoc.spec,
   parseTime: state.neodoc.parseTime,
@@ -332,6 +347,7 @@ const mapDispatchToProps = (dispatch) => ({
   setSmartOptions: (event) => dispatch(setSmartOptions(event.target.checked)),
   setRequireFlags: (event) => dispatch(setRequireFlags(event.target.checked)),
   setLaxPlacement: (event) => dispatch(setLaxPlacement(event.target.checked)),
+  setRepeatableOptions: (event) => dispatch(setRepeatableOptions(event.target.checked)),
   setKeybindings: (event) => dispatch(setKeybindings(event.target.value)),
   setStopAt: (event) => dispatch(setStopAt(event.target.value.split(' '))),
   setEnv: (s) => dispatch(setEnv(s))
