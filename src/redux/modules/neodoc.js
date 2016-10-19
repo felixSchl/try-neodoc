@@ -11,6 +11,7 @@ export const NEODOC_SET_SMART_OPTS = 'NEODOC_SET_SMART_OPTS';
 export const NEODOC_SET_REQUIRE_FLAGS = 'NEODOC_SET_REQUIRE_FLAGS';
 export const NEODOC_SET_STOP_AT = 'NEODOC_SET_STOP_AT';
 export const NEODOC_SET_LAX_PLACEMENT = 'NEODOC_SET_LAX_PLACEMENT';
+export const NEODOC_SET_REPEATABLE_OPTIONS = 'NEODOC_SET_REPEATABLE_OPTIONS';
 
 type State = {
   source: string,
@@ -20,6 +21,7 @@ type State = {
   optionsFirst: boolean,
   smartOptions: boolean,
   laxPlacement: boolean,
+  repeatableOptions: boolean,
   spec: Object,
   parseTime: Number,
   runTime: Number
@@ -81,6 +83,13 @@ export function setStopAt (value: boolean): Action {
   };
 }
 
+export function setRepeatableOptions (value: string): Action {
+  return {
+    type: NEODOC_SET_REPEATABLE_OPTIONS,
+    payload: value
+  };
+}
+
 export const actions = {
   setSource,
   setArgv,
@@ -89,6 +98,7 @@ export const actions = {
   setSmartOptions,
   setRequireFlags,
   setLaxPlacement,
+  setRepeatableOptions,
   setStopAt
 };
 
@@ -139,6 +149,7 @@ function run (state, opts) {
           requireFlags: or(opts.requireFlags, state.requireFlags),
           laxPlacement: or(opts.laxPlacement, state.laxPlacement),
           smartOptions: or(opts.smartOptions, state.smartOptions),
+          repeatableOptions: or(opts.repeatableOptions, state.repeatableOptions),
           stopAt: or(opts.stopAt, state.stopAt),
           version: '0.5'
         }
@@ -166,6 +177,7 @@ function run (state, opts) {
     optionsFirst: or(opts.optionsFirst, state.optionsFirst),
     smartOptions: or(opts.smartOptions, state.smartOptions),
     laxPlacement: or(opts.laxPlacement, state.laxPlacement),
+    repeatableOptions: or(opts.repeatableOptions, state.repeatableOptions),
     requireFlags: or(opts.requireFlags, state.requireFlags),
     stopAt: or(opts.stopAt, state.stopAt),
 
@@ -190,7 +202,7 @@ function run (state, opts) {
   }
 
   function or (a, b) {
-    if (a === undefined || a === null) {
+    if (a == null) {
       return b;
     } else {
       return a;
@@ -230,6 +242,10 @@ const ACTION_HANDLERS = {
   [NEODOC_SET_LAX_PLACEMENT]:
     (state: State, action: {payload: boolean}) => {
       return run(state, { laxPlacement: action.payload });
+    },
+  [NEODOC_SET_REPEATABLE_OPTIONS]:
+    (state: State, action: {payload: boolean}) => {
+      return run(state, { repeatableOptions: action.payload });
     }
 };
 
@@ -265,6 +281,7 @@ Options:
   smartOptions: true,
   requireFlags: false,
   laxPlacement: false,
+  repeatableOptions: false,
   stopAt: []
 });
 
