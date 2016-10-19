@@ -12,6 +12,7 @@ export const NEODOC_SET_REQUIRE_FLAGS = 'NEODOC_SET_REQUIRE_FLAGS';
 export const NEODOC_SET_STOP_AT = 'NEODOC_SET_STOP_AT';
 export const NEODOC_SET_LAX_PLACEMENT = 'NEODOC_SET_LAX_PLACEMENT';
 export const NEODOC_SET_REPEATABLE_OPTIONS = 'NEODOC_SET_REPEATABLE_OPTIONS';
+export const NEODOC_SET_ALLOW_UNKNOWN = 'NEODOC_SET_ALLOW_UNKNOWN';
 
 type State = {
   source: string,
@@ -21,6 +22,7 @@ type State = {
   optionsFirst: boolean,
   smartOptions: boolean,
   laxPlacement: boolean,
+  allowUnknown: boolean,
   repeatableOptions: boolean,
   spec: Object,
   parseTime: Number,
@@ -90,6 +92,13 @@ export function setRepeatableOptions (value: string): Action {
   };
 }
 
+export function setAllowUnknown (value: string): Action {
+  return {
+    type: NEODOC_SET_ALLOW_UNKNOWN,
+    payload: value
+  };
+}
+
 export const actions = {
   setSource,
   setArgv,
@@ -99,6 +108,7 @@ export const actions = {
   setRequireFlags,
   setLaxPlacement,
   setRepeatableOptions,
+  setAllowUnknown,
   setStopAt
 };
 
@@ -150,6 +160,7 @@ function run (state, opts) {
           laxPlacement: or(opts.laxPlacement, state.laxPlacement),
           smartOptions: or(opts.smartOptions, state.smartOptions),
           repeatableOptions: or(opts.repeatableOptions, state.repeatableOptions),
+          allowUnknown: or(opts.allowUnknown, state.allowUnknown),
           stopAt: or(opts.stopAt, state.stopAt),
           version: '0.5'
         }
@@ -178,6 +189,7 @@ function run (state, opts) {
     smartOptions: or(opts.smartOptions, state.smartOptions),
     laxPlacement: or(opts.laxPlacement, state.laxPlacement),
     repeatableOptions: or(opts.repeatableOptions, state.repeatableOptions),
+    allowUnknown: or(opts.allowUnknown, state.allowUnknown),
     requireFlags: or(opts.requireFlags, state.requireFlags),
     stopAt: or(opts.stopAt, state.stopAt),
 
@@ -246,6 +258,10 @@ const ACTION_HANDLERS = {
   [NEODOC_SET_REPEATABLE_OPTIONS]:
     (state: State, action: {payload: boolean}) => {
       return run(state, { repeatableOptions: action.payload });
+    },
+  [NEODOC_SET_ALLOW_UNKNOWN]:
+    (state: State, action: {payload: boolean}) => {
+      return run(state, { allowUnknown: action.payload });
     }
 };
 
@@ -282,6 +298,7 @@ Options:
   requireFlags: false,
   laxPlacement: false,
   repeatableOptions: false,
+  allowUnknown: false,
   stopAt: []
 });
 

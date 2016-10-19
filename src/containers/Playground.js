@@ -2,7 +2,8 @@ import _ from 'lodash';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { setSmartOptions, setSource, setArgv, setOptionsFirst, setStopAt,
-         setRequireFlags, setLaxPlacement, setRepeatableOptions, setEnv
+         setRequireFlags, setLaxPlacement, setRepeatableOptions, setEnv,
+         setAllowUnknown
        } from 'redux/modules/neodoc';
 import { setKeybindings } from 'redux/modules/editor';
 import Codemirror from 'react-codemirror';
@@ -25,7 +26,11 @@ class NewFeature extends React.Component {
   }
 
   render () {
-    return <sub className='new-feature'>v{this.props.version}</sub>;
+    return <sub className='new-feature'>{
+      this.props.version === 'preview'
+        ? this.props.version
+        : `v${this.props.version}`
+    }</sub>;
   }
 }
 
@@ -45,12 +50,14 @@ export class Playground extends React.Component {
     setRequireFlags: PropTypes.func.isRequired,
     setLaxPlacement: PropTypes.func.isRequired,
     setRepeatableOptions: PropTypes.func.isRequired,
+    setAllowUnknown: PropTypes.func.isRequired,
     setStopAt: PropTypes.func.isRequired,
     optionsFirst: PropTypes.bool,
     smartOptions: PropTypes.bool,
     requireFlags: PropTypes.bool,
     laxPlacement: PropTypes.bool,
     repeatableOptions: PropTypes.bool,
+    allowUnknown: PropTypes.bool,
     parseTime: PropTypes.number,
     runTime: PropTypes.number,
     spec: PropTypes.object,
@@ -115,16 +122,16 @@ export class Playground extends React.Component {
                 {
                   (this.props.userError || this.props.specError)
                     ? <div id='error'
-                        className='popup-box'
-                        style={{whiteSpace: 'pre'}}
-                        key='neodoc-error'>
+                      className='popup-box'
+                      style={{whiteSpace: 'pre'}}
+                      key='neodoc-error'>
                       <pre>{this.props.userError || this.props.specError}</pre>
                     </div>
                     : (typeof this.props.output === 'string')
                       ? <div id='txt-output'
-                          className='popup-box'
-                          style={{whitespace: 'pre'}}
-                          key='neodoc-txt-output'>
+                        className='popup-box'
+                        style={{whitespace: 'pre'}}
+                        key='neodoc-txt-output'>
                         <pre>{this.props.output}</pre>
                       </div>
                       : null
@@ -229,7 +236,19 @@ export class Playground extends React.Component {
                   onChange={this.props.setRepeatableOptions} />
                 <label htmlFor='repeatable-options' className='right'>
                   repeatable-options
-                  <NewFeature version='1.0.1' />
+                  <NewFeature version='1.0.0' />
+                </label>
+              </li>
+
+              <li className='option important even'>
+                <input id='allow-unknown'
+                  type='checkbox'
+                  checked={this.props.allowUnknown}
+                  defaultChecked={this.props.allowUnknown}
+                  onChange={this.props.setAllowUnknown} />
+                <label htmlFor='allow-unknown' className='right'>
+                  allow-unknown
+                  <NewFeature version='preview' />
                 </label>
               </li>
 
@@ -332,6 +351,7 @@ const mapStateToProps = (state) => ({
   requireFlags: state.neodoc.requireFlags,
   laxPlacement: state.neodoc.laxPlacement,
   repeatableOptions: state.neodoc.repeatableOptions,
+  allowUnknown: state.neodoc.allowUnknown,
   stopAt: state.neodoc.stopAt,
   spec: state.neodoc.spec,
   parseTime: state.neodoc.parseTime,
@@ -348,6 +368,7 @@ const mapDispatchToProps = (dispatch) => ({
   setRequireFlags: (event) => dispatch(setRequireFlags(event.target.checked)),
   setLaxPlacement: (event) => dispatch(setLaxPlacement(event.target.checked)),
   setRepeatableOptions: (event) => dispatch(setRepeatableOptions(event.target.checked)),
+  setAllowUnknown: (event) => dispatch(setAllowUnknown(event.target.checked)),
   setKeybindings: (event) => dispatch(setKeybindings(event.target.value)),
   setStopAt: (event) => dispatch(setStopAt(event.target.value.split(' '))),
   setEnv: (s) => dispatch(setEnv(s))
